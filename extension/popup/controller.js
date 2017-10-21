@@ -7,6 +7,19 @@ app.controller('control', function($scope, $http){
 	$scope.vcodes = [];
 	$scope.vcode_input = "";
 	$scope.bduss;
+	$scope.rpcAddrs = [];
+	$scope.rpcSelected;
+
+	var rpc_list=JSON.parse(localStorage.getItem("rpc_list"));
+	if (rpc_list && rpc_list.length > 0) {
+		for(var i=0; i<rpc_list.length; i++) {
+			$scope.rpcAddrs[i] = rpc_list[i];
+		};
+	} else {
+		$scope.rpcAddrs[0] = {'name': 'Aria2', 'url': 'http://127.0.0.1:6800/jsonrpc'}
+	}
+
+	$scope.rpcSelected = $scope.rpcAddrs[0];
 
 	// get pan.baidu.com credential
 	chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDUSS'}, function(cookie){
@@ -133,13 +146,18 @@ app.controller('control', function($scope, $http){
 
 	$scope.download = function(index){
 		// whether hlink is generated
+		var rpc = $scope.rpcSelected;
+		console.log(rpc.url)
+
 		if(!$scope.links[index].hlink){
 			$scope.message = 'hlink is not generated';
 			return;
 		}
 
+		$scope.message = 'RPC: ' + rpc.url + '<br/>';
+
 		// try to connect to aria2 rpc
-		$http.post('http://127.0.0.1:6800/jsonrpc', {'jsonrpc': '2.0', 'method': 'aria2.tellActive', 'id': 'connect'})
+		$http.post(rpc.url, {'jsonrpc': '2.0', 'method': 'aria2.tellActive', 'id': 'connect'})
 		.then(function(res){
 			get_all_hlinks(index, function(urls){
 				var max_threads = 164;
@@ -165,18 +183,19 @@ app.controller('control', function($scope, $http){
 				jsonreq['params'] = params;
 
 				// send request to aria rpc
-				$http.post('http://127.0.0.1:6800/jsonrpc', jsonreq)
+				$http.post(rpc.url, jsonreq)
 
 				// notification
-				$scope.message = 'Download starts and the speed is ' + url.searchParams.get('csl');
+				$scope.message += 'Download starts and the speed is ' + url.searchParams.get('csl');
 			});
 		}, function(res){
 			if(res.status < 0){
-				$scope.message = 'Warning: aria2c is not running on port 6800';
+				$scope.message += 'Warning: aria2c is not running on port 6800';
 				return;
 			}else{
-				$scope.message = 'Error: can\' connect to aria2'
+				$scope.message += 'Error: can\' connect to aria2'
 			}
 		})
+
 	}
 })

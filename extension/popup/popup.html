@@ -10,6 +10,10 @@
 
 	<body>
 		<div id='app'ng-app="app" ng-csp ng-controller='control'>
+			<div ng-hide='!status'>
+				<span>RPC Address</span>
+				<select ng-model="rpcSelected" ng-options="x.url for x in rpcAddrs"></select>
+			</div>
 			<table ng-hide='!status'>
 				<tr>
 					<td>File name</td>

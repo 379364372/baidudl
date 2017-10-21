@@ -25,6 +25,8 @@
 		"default_title"	: "Click here!"
 	},
 
+	"options_page": "options.html",	
+
 	"content_scripts": [{
 		"matches": ["https://pan.baidu.com/*", "http://pan.baidu.com/*"],
 		"js": ["resource/jquery.min.js"],
