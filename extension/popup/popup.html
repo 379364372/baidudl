@@ -12,7 +12,7 @@
 		<div id='app'ng-app="app" ng-csp ng-controller='control'>
 			<div ng-hide='!status'>
 				<span>RPC Address</span>
-				<select ng-model="rpcSelected" ng-options="x.url for x in rpcAddrs"></select>
+				<select ng-model="rpc_addr" ng-options="x.url for x in rpc_options"></select>
 			</div>
 			<table ng-hide='!status'>
 				<tr>
