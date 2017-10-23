@@ -10,16 +10,21 @@ app.controller('control', function($scope, $http){
 	$scope.rpc_options = [];
 	$scope.rpc_addr;
 
-	var rpc_list=JSON.parse(localStorage.getItem("rpc_list"));
+	// set rpc address
+	var rpc_index = 0;	
+	var rpc_history = JSON.parse(localStorage.getItem('rpc_history'));
+	var rpc_list=JSON.parse(localStorage.getItem('rpc_list'));
 	if (rpc_list && rpc_list.length > 0) {
 		for(var i=0; i<rpc_list.length; i++) {
 			$scope.rpc_options[i] = rpc_list[i];
-		};
+			if (rpc_history && (rpc_history.name == rpc_list[i].name)) {
+				rpc_index = i;
+			}
+		}
 	} else {
-		$scope.rpc_options[0] = {'name': 'Aria2', 'url': 'http://127.0.0.1:6800/jsonrpc'}
+		$scope.rpc_options[0] = {'name': 'Aria2', 'url': 'http://localhost:6800/jsonrpc'}
 	}
-
-	$scope.rpc_addr = $scope.rpc_options[0];
+	$scope.rpc_addr = $scope.rpc_options[rpc_index];		
 
 	// get pan.baidu.com credential
 	chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDUSS'}, function(cookie){
@@ -145,12 +150,16 @@ app.controller('control', function($scope, $http){
 	}
 
 	$scope.download = function(index){
+
+		localStorage.setItem('rpc_history', angular.toJson($scope.rpc_addr));		
+
 		// whether hlink is generated
 		if(!$scope.links[index].hlink){
 			$scope.message = 'hlink is not generated';
 			return;
 		}
 
+		// refer: https://github.com/binux/yaaw
 		function request_auth(url) {
 			return url.match(/^(?:(?![^:@]+:[^:@\/]*@)[^:\/?#.]+:)?(?:\/\/)?(?:([^:@]*(?::[^:@]*)?)?@)?/)[1];
 		}
@@ -165,7 +174,7 @@ app.controller('control', function($scope, $http){
 			active_payload['params']=[auth_str];		  
 		  	rpc_interface = remove_auth(rpc_interface);
 		}
-
+		
 		// try to connect to aria2 rpc
 		$http.post(rpc_interface, active_payload)
 		.then(function(res){
@@ -199,14 +208,14 @@ app.controller('control', function($scope, $http){
 				$http.post(rpc_interface, jsonreq)
 
 				// notification
-				$scope.message += 'Download starts and the speed is ' + url.searchParams.get('csl');
+				$scope.message = 'Added to ' + rpc_interface + '. The speed is ' + url.searchParams.get('csl');
 			});
 		}, function(res){
 			if(res.status < 0){
-				$scope.message += 'Warning: aria2c is not running on port 6800';
+				$scope.message = 'Warning: aria2c is not running on ' + rpc_interface;
 				return;
 			}else{
-				$scope.message += 'Error: can\' connect to aria2'
+				$scope.message = 'Error: can\' connect to ' + rpc_interface;
 			}
 		})
 
