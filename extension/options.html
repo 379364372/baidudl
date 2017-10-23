@@ -5,7 +5,6 @@
     <title>baidudl for Chrome Settings</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
     <link href="icon/icon16.png" rel="shortcut icon" type="image/ico" />
-    <link href="resource/options.css" rel="stylesheet" />
     <style type="text/css">
     body,html {
       height: 100%;
@@ -24,11 +23,24 @@
       z-index: 200;
       box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
     }
+
+    fieldset {
+      margin: 10px 0;
+      padding: 10px 8px;
+    }
+
     legend{
       margin-bottom: 0px;
     }
-    .rpc-path{
+    .rpc-name {
+      max-width: 66px;
+    }
+    .rpc-path {
       margin-left: 10px;
+      min-width: 233px;
+    }
+    .rpc_details {
+      margin-bottom: 8px; 
     }
     #add-rpc{
       margin-left: 10px;
@@ -42,13 +54,16 @@
   <body>
     <div class="container">
       <div class="form-horizontal">
-        <fieldset>
-          <legend>baidudl settings</legend>
+        <fieldset id="rpc-list">
+          <legend>RPC settings</legend>
         </fieldset>
       </div>
-      <div class="modal-footer">
-        <button type="btn" class="btn btn-success" id="save">Save</button>
-        <button class="btn" id="reset">Reset</button>
+      <div class="footer">
+        <button class="btn" id="add-rpc">Add RPC</button>
+        <div style="float:right">
+            <button type="btn" class="btn btn-success" id="save">Save</button>
+            <button class="btn" id="reset">Reset</button>
+        </div>
       </div>
     </div>
     <script src="resource/jquery.min.js"></script>
