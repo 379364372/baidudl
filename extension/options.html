@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset=utf-8 />
+    <title>baidudl for Chrome Settings</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
+    <link href="icon/icon16.png" rel="shortcut icon" type="image/ico" />
+    <style type="text/css">
+    body,html {
+      height: 100%;
+    }
+    #logo{
+      margin-left: 100px;
+      background-image: url(images/logo128.png);
+      background-size: 128px 128px;
+      width: 128px;
+      height: 128px;
+    }
+    .navbar{
+      background-color: #8191F1;
+      padding: 15px 15px 0 15px;
+      color: white;
+      z-index: 200;
+      box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+    }
+
+    fieldset {
+      margin: 10px 0;
+      padding: 10px 8px;
+    }
+
+    legend{
+      margin-bottom: 0px;
+    }
+    .rpc-name {
+      max-width: 66px;
+    }
+    .rpc-path {
+      margin-left: 10px;
+      min-width: 233px;
+    }
+    .rpc_details {
+      margin-bottom: 8px; 
+    }
+    #add-rpc{
+      margin-left: 10px;
+    }
+
+    </style>
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-horizontal">
+        <fieldset id="rpc-list">
+          <legend>RPC settings</legend>
+        </fieldset>
+      </div>
+      <div class="footer">
+        <button class="btn" id="add-rpc">Add RPC</button>
+        <div style="float:right">
+            <button type="btn" class="btn btn-success" id="save">Save</button>
+            <button class="btn" id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+    <script src="resource/jquery.min.js"></script>
+    <script src="resource/options.js"></script>    
+  </body>
+</html>
+<!-- vim: set et sw=2 ts=2 sts=2 ff=unix fenc=utf8: -->
