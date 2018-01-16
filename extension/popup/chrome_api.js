@@ -52,25 +52,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 	{urls: ['*://d.pcs.baidu.com/rest/2.0/pcs/file?*']},
 	['blocking', 'requestHeaders']
 )
-chrome.webRequest.onBeforeSendHeaders.addListener(
-	function(details){
-		var headers = details.requestHeaders;
-		var index = -1;
-		for(var i=0; i<headers.length; i++){
-			if(headers[i].name == 'Cookie'){
-				index = i;
-				break;
-			}
-		}
-		if(index >= 0){
-			headers.splice(index, 1)
-		}
-
-		return {'requestHeaders': headers}
-	},
-	{urls: ["*://d.pcs.baidu.com/file/*"]},
-	['blocking', 'requestHeaders']
-)
 chrome.webRequest.onBeforeRequest.addListener(
 	function(details){
 		var url = new URL(details.url);
@@ -86,6 +67,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 // add listener to handle received message
 chrome.runtime.onMessage.addListener(function(req, sender, sendResponse){
 	var $scope = angular.element(document.getElementById('app')).scope();
+	if(!$scope.login)return;
 	if(req.type == "dlink"){
 		$scope.$apply(function(){
 			$scope.links = req.result;

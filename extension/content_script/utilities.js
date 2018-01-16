@@ -225,14 +225,11 @@ function get_vcode(cb){
 
 // get extra parameter for verification
 function get_extra(){
-	var dict = {};
-	var cookies = document.cookie.split(';');
-	cookies.forEach(function(d){
-		var x = d.split('=');
-		dict[x[0]] = x[1];
-	})
-	var extra = JSON.stringify({sekey:decodeURIComponent(dict[" BDCLND"])});
-	return extra;
+	return JSON.stringify({sekey:decodeURIComponent(get_cookie("BDCLND"))});
+}
+function get_cookie(key){
+	var cookiestring=RegExp(""+key+"[^;]+").exec(document.cookie);
+	return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
 }
 
 // list directory
