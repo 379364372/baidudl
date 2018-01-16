@@ -3,6 +3,7 @@ app.controller('control', function($scope, $http){
 	// initialize angular model
 	$scope.message = 'pan.baidu.com only';
 	$scope.status = false;
+	$scope.login = false;
 	$scope.page = 1;
 	$scope.vcodes = [];
 	$scope.vcode_input = "";
@@ -29,7 +30,14 @@ app.controller('control', function($scope, $http){
 	// get pan.baidu.com credential
 	chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDUSS'}, function(cookie){
 		$scope.$apply(function(){
-			$scope.bduss = cookie? cookie.value: '';
+			if(cookie){
+				$scope.login = true;
+				$scope.bduss = cookie.value;
+			}
+			else{
+				$scope.bduss = '';
+				$scope.message = 'You need to login first';
+			}
 		})
 	})
 
