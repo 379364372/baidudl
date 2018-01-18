@@ -195,7 +195,7 @@ app.controller('control', function($scope, $http){
 				options = {};
 				options['split'] = threads+'';
 				options['max-connection-per-server'] = '16';
-				options['user-agent'] = 'netdisk;2.2.0;macbaiduyunguanjia';
+				options['user-agent'] = navigator.userAgent;
 				options['check-certificate'] = 'false';
 				options['min-split-size'] = '1m';
 				options['summary-interal'] = '0';
