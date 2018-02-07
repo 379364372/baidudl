@@ -10,22 +10,8 @@ function get_user_yunData(cb){
 	})
 }
 
-function get_share_yunData(url, cb){
-	$.ajax({
-		url: url.href,
-		success: function(d){
-			// parse yunData from js files
-			var code = d.match(/yunData\.setData\(.*\)/);
-			var data = code[0].substring(16, code[0].length-1);
-			var yunData = JSON.parse(data);
-			cb(yunData);
-		}
-	})
-}
-
 // get path parameter from url
 function getURLParameter(url, name) {
-	var url = new URL(url);
 	var x = url.hash.split('/');
 	var y = x[x.length-1].split('&')
 	for(var i=0; i<y.length; i++){

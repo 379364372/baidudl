@@ -25,7 +25,8 @@
 			"resource/jquery.min.js",
 			"resource/angular.min.js",
 			"background/background.js",
-			"background/utilities.js"
+			"background/utilities.js",
+			"background/models.js"
 		]
 	},
 
@@ -37,7 +38,6 @@
 		"cookies",
 		"webRequest",
 		"webRequestBlocking",
-		"http://127.0.0.1:8333/",
 		"*://pan.baidu.com/",
 		"*://d.pcs.baidu.com/"
 	]
