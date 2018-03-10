@@ -4,6 +4,12 @@
 
 		<script src="/resource/angular.min.js"></script>
 		<script src="/popup/controller.js"></script>
+		<style>
+			#copy{
+				opacity: 0;
+				position: 'fixed'
+			}
+		</style>
 	</head>
 
 	<body>
@@ -35,6 +41,7 @@
 				<button ng-click="refresh(input)">refresh</button>
 			</div>
 		</div>
+	<textarea id='copy'></textarea>
 	</body>
 </html>
 

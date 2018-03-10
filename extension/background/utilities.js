@@ -141,6 +141,6 @@ function updatePopup()
 		$scope.fsidList = page.fileList.fsidList;
 		$scope.page = page.page;
 		$scope.vcode = page.vcode;
-		$scope.message = 'Ready.';
+		$scope.message = page.message;
 	});
 }

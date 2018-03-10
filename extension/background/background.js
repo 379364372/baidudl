@@ -38,7 +38,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	}
 	else if(url.pathname.match(/s\/|share\/link/)){
 		chrome.pageAction.show(tabId);
-		page = new SharePage(url)
+		page = new SharePage(url);
 		page.execute();
 	}
 });
