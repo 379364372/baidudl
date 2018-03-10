@@ -124,8 +124,7 @@ function unshare(yunData, shareid, cb){
 	})
 }
 
-function updatePopup()
-{
+function updatePopup(){
 	var views = chrome.extension.getViews({
 		type: "popup"
 	});

@@ -5,12 +5,18 @@ Models
 function SharePage(url)
 {
     var self = this;
-    self.url = url;
-    self.pageno = 1;
-    self.vcode = false;
-    self.extra = '';
-    self.yunData = [];
-    self.fileList = [];
+    // init
+    self.init = function(url){
+        self.url = url;
+        self.pageno = 1;
+        self.vcode = false;
+        self.extra = '';
+        self.yunData = [];
+        self.fileList = [];
+        chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDUSS'}, function(cookie){
+            self.bduss = cookie.value;
+        });
+    };
 
     // get verification parameter extra
     self.getExtra = function(cb){
@@ -108,6 +114,8 @@ function SharePage(url)
             });
         });
     };
+
+    self.init(url);
 }
 
 //function HomePage(url)

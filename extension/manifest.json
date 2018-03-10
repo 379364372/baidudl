@@ -26,7 +26,8 @@
 			"resource/angular.min.js",
 			"background/background.js",
 			"background/utilities.js",
-			"background/models.js"
+			"background/models.js",
+			"background/download.js"
 		]
 	},
 
@@ -39,6 +40,8 @@
 		"webRequest",
 		"webRequestBlocking",
 		"*://pan.baidu.com/",
-		"*://d.pcs.baidu.com/"
+		"*://d.pcs.baidu.com/",
+		"http://*/jsonrpc",
+		"https://*/jsonrpc"
 	]
 }

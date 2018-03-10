@@ -51,7 +51,14 @@ app.controller('control', function($scope, $http){
 		else $scope.message = "Copy failure";
 		$scope.textarea.val('');
 	};
-	$scope.rpcdownload = function(){};
+	$scope.download = function(idx){
+		// check glink
+		if(!$scope.fileList[idx].glink){
+			$scope.message = 'Warning: Glink should be generated before download!';
+			return;
+		}
+		$scope.background.download($scope.fileList[idx].glink);
+	};
 
 	$scope.refresh = function(){
 		new $scope.background.Error(-20).handle();
