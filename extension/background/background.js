@@ -16,7 +16,8 @@ chrome.storage.local.get('config', function(result){
 	}
 });
 
-//distinguish different url and apply different operations
+var page;
+//distinguish different url and carry out different operations
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 
 	var url = new URL(tab.url);
@@ -26,15 +27,18 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	if(url.pathname == '/disk/home'){
 		chrome.pageAction.show(tabId);
 		if(url.hash.substr(0, 5) == '#list' && url.hash.indexOf('vmode') > 0){
-			new HomePage(url).execute();
+			page = new HomePage(url);
+			page.execute();
 		}
 		else if(url.hash.substr(0, 7) == '#search' && url.hash.indexOf('vmode') > 0){
-			new SearchPage(url).execute();
+			page = new SearchPage(url);
+			page.execute();
 		}
 		else chrome.pageAction.hide(tabId);
 	}
 	else if(url.pathname.match(/s\/|share\/link/)){
 		chrome.pageAction.show(tabId);
-		new SharePage(url).execute();
+		page = new SharePage(url)
+		page.execute();
 	}
 });

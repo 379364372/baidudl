@@ -1,7 +1,13 @@
 var app = angular.module('app', []);
-app.controller('control', function($scope, $interval){
-	$scope.status = false;
-	$scope.message = 'loading...';
+app.controller('control', function($scope, $http){
+
+	// init
+	$scope.fileList = [];
+	$scope.fsidList = [];
+	$scope.page = 1;
+	$scope.vcode = false;
+	$scope.message = 'Loading...';
+	$scope.background = chrome.extension.getBackgroundPage();
 
 	$scope.clear = function(){};
 	$scope.generate = function(){};
@@ -9,32 +15,21 @@ app.controller('control', function($scope, $interval){
 	$scope.copy = function(){};
 	$scope.copyAll = function(){};
 	$scope.download = function(){};
-	$scope.verify = function(){};
 
-	//var checkDatabase = function (){
-	//	var background = chrome.extension.getBackgroundPage();
-	//	var database = background.database;
-	//	console.log('refreshing...');
-	//	console.log(database);
-	//	$scope.message = 'loading...';
-	//	switch(database.status){
-	//		case 'loading':
-	//			$scope.status = false;
-	//			break;
-	//		case 'error':
-	//			$scope.status = false;
-	//			$interval.cancel(checkRoutine);
-	//			break;
-	//		case 'complete':
-	//			$scope.status = true;
-	//			$scope.links = database.links;
-	//			$scope.vcodes = database.vcodes;
-	//			$interval.cancel(checkRoutine);
-	//			break;
-	//		default:
-	//			$scope.status = false;
-	//			$scope.message = 'Error: unknown status';
-	//	}
-	//};
-	//var checkRoutine = $interval(checkDatabase, 1000);
+	$scope.refresh = function(){
+		new $scope.background.Error(-20).handle();
+	};
+	$scope.verify = function(input){
+		$scope.background.page.getGlink(true, $scope.vcode, input);
+	};
+	$scope.init = function(page){
+		console.log('initializing popup');
+		$scope.message = 'Loading...';
+		$scope.fileList = page.fileList.fileList;
+		$scope.fsidList = page.fileList.fsidList;
+		$scope.page = page.page;
+		$scope.vcode = page.vcode;
+		$scope.message = 'Ready.';
+	};
+	$scope.init($scope.background.page);
 });

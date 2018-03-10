@@ -8,36 +8,32 @@
 
 	<body>
 		<div id='app'ng-app="app" ng-csp ng-controller='control'>
-			<table ng-hide='!status'>
+			<table>
 				<tr>
 					<td>File name</td>
 					<td>Glinks</td>
 					<td><button ng-click="copyAll('glink')">CopyAll</button></td>
 					<td>Hlinks</td>
-					<td><button ng-click="generateAll()">GenerateAll</button></td>
 					<td><button ng-click="copyAll('hlink')">CopyAll</button></td>
 					<td><button ng-click="clear()">clearCache</td>
 				</tr>
-				<tr ng-repeat="x in links">
-					<td><input style="width: 300px" type='text' value={{x.path}} ng-disabled='true'></td>
+				<tr ng-repeat="x in fileList">
+					<td><input style="width: 300px" type='text' value={{x.name}} ng-disabled='true'></td>
 					<td><input style="width: 50px"type='text' value={{x.glink}} ng-disabled='true'></td>
 					<td><button ng-click="copy($index, 'glink')">Copy</button></td>
 					<td><input style="width: 50px"type='text' value={{x.hlink}} ng-disabled='true'></td>
-					<td><button ng-click="generate($index)">Generate</button></td>
 					<td><button ng-click="copy($index, 'hlink')">Copy</button></td>
 					<td><button ng-click="download($index)" ng-hide='x.isdir'>RPCDownload</td>
 				</tr>
 			</table>
-			<div ng-hide='!status'><button ng-click="prev()">&lt;</button>{{page}}<button ng-click="next()">&gt;</button></div>
+			<div><button ng-click="prev()">&lt;</button>{{page}}<button ng-click="next()">&gt;</button></div>
 			<p>{{message}}</p>
-			<table id='vcode_table'>
-				<tr ng-repeat="x in vcodes">
-					<td><img ng-src='https://pan.baidu.com/genimage?{{x.vcode_str}}'></td>
-					<td><input type='text' ng-model='vcode_input'></td>
-					<td><button ng-click="verify($index, vcode_input)">verify</button></td>
-					<td><button ng-click="verify($index, vcode_input)">refresh</button></td>
-				</tr>
-			</table>
+			<div ng-disabled='!vcode' ng-hide='!vcode'>
+				<img ng-src='https://pan.baidu.com/genimage?{{vcode}}'>
+				<input type='text' ng-model='input'>
+				<button ng-click="verify(input)">verify</button>
+				<button ng-click="refresh(input)">refresh</button>
+			</div>
 		</div>
 	</body>
 </html>

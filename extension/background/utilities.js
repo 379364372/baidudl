@@ -26,23 +26,19 @@ function getURLParameter(url, name) {
 // I don't understand it. But we don't have to.
 function b64(t) {
 	var e, r, a, n, o, i, s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	for (a = t.length,
-	r = 0,
-	e = ""; a > r; ) {
-		if (n = 255 & t.charCodeAt(r++),
-		r == a) {
-			e += s.charAt(n >> 2),
-			e += s.charAt((3 & n) << 4),
+	for (a = t.length, r = 0, e = ""; a > r; ) {
+		if (n = 255 & t.charCodeAt(r++), r == a) {
+			e += s.charAt(n >> 2);
+			e += s.charAt((3 & n) << 4);
 			e += "==";
-		break
+			break;
 		}
-		if (o = t.charCodeAt(r++),
-		r == a) {
-			e += s.charAt(n >> 2),
-			e += s.charAt((3 & n) << 4 | (240 & o) >> 4),
-			e += s.charAt((15 & o) << 2),
+		if (o = t.charCodeAt(r++), r == a) {
+			e += s.charAt(n >> 2);
+			e += s.charAt((3 & n) << 4 | (240 & o) >> 4);
+			e += s.charAt((15 & o) << 2);
 			e += "=";
-			break
+			break;
 		}
 		i = t.charCodeAt(r++),
 		e += s.charAt(n >> 2),
@@ -50,49 +46,8 @@ function b64(t) {
 		e += s.charAt((15 & o) << 2 | (192 & i) >> 6),
 		e += s.charAt(63 & i)
 	}
-	return e
+	return e;
 };
-
-// list directory
-function list_dir(yunData, parsed_url, type, page, cb){
-	/*
-	 * Parameters:
-	 * 	type: list directory in homepage or list dirctory in shared page
-	 * 	page: which page to display
-	  */
-	console.log('Retrieving links');
-
-	// decide which url to use to list directory
-	if(type == 1)var url = "/api/list?";
-	else if(type == 2)var url = "/share/list?uk="+yunData.uk+"&shareid="+yunData.shareid+"&";
-	else return;
-
-	// append parameters
-	url += "dir="+getURLParameter(parsed_url.href, 'path')+"&bdstoken="+yunData.bdstoken+"&num=100&order=time&desc=1&clienttype=0&showempty=0&web=1&page="+page;
-
-	// start to list directory
-	$.ajax({
-		url: 'https://pan.baidu.com'+url,
-		success: function(res){
-			console.log("links retrieved");
-
-			// if error is encountered
-			if(res.errno != 0 ){
-				console.log(res);
-				database.status = 'error';
-				database.message = 'Error: can\'t list folder';
-				return;
-			}
-			// good, we make it
-			if(res.list.length == 0){
-				database.status = 'error';
-				database.message = 'It\'s empty!'
-				return;
-			}
-			cb(res.list);
-		}
-	})
-}
 
 // list search result
 function list_search(yunData, url, cb){
@@ -161,7 +116,7 @@ function unshare(yunData, shareid, cb){
 				var err_msg = "Warning: can't auto unshare the file";
 				var event = new CustomEvent("error", {detail: err_msg});
 				window.dispatchEvent(event);
-				return
+				return;
 			}
 			console.log("Unshare success");
 			cb();
@@ -169,37 +124,23 @@ function unshare(yunData, shareid, cb){
 	})
 }
 
-function get_glink(yunData, batch, vcode, fidlist, cb){
-	var url = 'https://pan.baidu.com/api/sharedownload?sign='+yunData.sign+'&timestamp='+yunData.timestamp+'&bdstoken='+yunData.bdstoken+'&channel=chunlei&clienttype=0&web=1&app_id=250528';
-	var data = "encrypt=0&product=share&uk="+yunData.uk+"&primaryid="+yunData.shareid+'&fid_list='+JSON.stringify(fidlist);
-	if(batch) data += '&type=batch';
-	chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDCLND'}, function(cookie){
-		var extra = JSON.stringify({sekey:decodeURIComponent(cookie.value)});
-		data += '&extra='+encodeURIComponent(extra);
-		$.ajax({
-			type: 'POST',
-			url: url,
-			data: data,
-			dataType: 'json',
-			success: function(res){
-				if(res.errno != 0){
-					console.log(res);
-					var err_msg = "Warning: can't get high speed link";
-					database.status = 'error';
-					database.message = err_msg;
-					return;
-				}
-				var links = [];
-				if(!batch){
-					res.list.forEach(function(e){
-						links.push({fs_id: e.fs_id, glink: e.dlink})
-					})
-				}else{
-					links = [res.dlink]
-				}
-				cb(links);
-			}
-		})
-	})
-	//if(vcode)data += "&vcode_str="+vcode.vcode_str+"&vcode_input="+vcode.vcode_input;
+function updatePopup()
+{
+	var views = chrome.extension.getViews({
+		type: "popup"
+	});
+	if(!views.length){
+		console.log('No popup detected');
+		return;
+	}
+	console.log('updating popup');
+	var $scope = views[0].angular.element(views[0].document.getElementById('app')).scope();
+	$scope.$apply(function(){
+		$scope.message = 'Loading...';
+		$scope.fileList = page.fileList.fileList;
+		$scope.fsidList = page.fileList.fsidList;
+		$scope.page = page.page;
+		$scope.vcode = page.vcode;
+		$scope.message = 'Ready.';
+	});
 }
