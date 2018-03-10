@@ -2,13 +2,17 @@ var app = angular.module('app', []);
 app.controller('control', function($scope, $http){
 
 	// init
-	$scope.fileList = [];
-	$scope.fsidList = [];
-	$scope.page = 1;
-	$scope.vcode = false;
-	$scope.message = 'Loading...';
-	$scope.background = chrome.extension.getBackgroundPage();
-
+	$scope.init = function(background){
+		var page = background.page;
+		console.log('initializing popup');
+		$scope.message = 'Loading...';
+		$scope.fileList = page.fileList.fileList;
+		$scope.fsidList = page.fileList.fsidList;
+		$scope.page = page.pageno;
+		$scope.vcode = page.vcode;
+		$scope.background = background;
+		$scope.message = 'Ready.';
+	};
 	$scope.clear = function(){};
 	$scope.generate = function(){};
 	$scope.generateAll = function(){};
@@ -22,14 +26,5 @@ app.controller('control', function($scope, $http){
 	$scope.verify = function(input){
 		$scope.background.page.getGlink(true, $scope.vcode, input);
 	};
-	$scope.init = function(page){
-		console.log('initializing popup');
-		$scope.message = 'Loading...';
-		$scope.fileList = page.fileList.fileList;
-		$scope.fsidList = page.fileList.fsidList;
-		$scope.page = page.page;
-		$scope.vcode = page.vcode;
-		$scope.message = 'Ready.';
-	};
-	$scope.init($scope.background.page);
+	$scope.init(chrome.extension.getBackgroundPage());
 });

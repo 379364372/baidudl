@@ -6,7 +6,7 @@ function SharePage(url)
 {
     var self = this;
     self.url = url;
-    self.page = 1;
+    self.pageno = 1;
     self.vcode = false;
     self.extra = '';
     self.yunData = [];
@@ -38,7 +38,7 @@ function SharePage(url)
     // list dir
     self.listDir = function(cb){
         $.ajax({
-            url: 'https://pan.baidu.com/share/list?uk='+self.yunData.uk+"&shareid="+self.yunData.shareid+'&dir='+getURLParameter(self.url, 'path')+"&bdstoken="+self.yunData.bdstoken+"&num=100&order=time&desc=1&clienttype=0&showempty=0&web=1&page="+self.page,
+            url: 'https://pan.baidu.com/share/list?uk='+self.yunData.uk+"&shareid="+self.yunData.shareid+'&dir='+getURLParameter(self.url, 'path')+"&bdstoken="+self.yunData.bdstoken+"&num=100&order=time&desc=1&clienttype=0&showempty=0&web=1&page="+self.pageno,
             success: function(res){
                 // if error is encountered
                 if(res.errno != 0 ){
