@@ -8,7 +8,7 @@ function DownloadManager(glink)
     var self = this;
 
     // update server list in config
-    self.__updateServers__ = function(hlinks){
+    self.__updateServers__ = function(hlinks, cb){
         var new_servers = hlinks.map(function(e){
             return new URL(e).host;
         });
@@ -17,6 +17,7 @@ function DownloadManager(glink)
         });
         config.servers = config.servers.concat(additional);
         chrome.storage.local.set({'config': config});
+        cb(config.servers);
     };
     self.getHLink = function(){
         self.__getHLinks__(function(hlinks){
@@ -70,13 +71,19 @@ function DownloadManager(glink)
                     return;
                 }
                 console.log('Get hlink list success');
-                console.log(res.urls);
                 var hlinks = res.urls.map(function(e){
                     return e.url;
                 });
                 self.hlinks = hlinks;
-                self.__updateServers__(hlinks);
-                return cb(hlinks);
+                self.__updateServers__(hlinks, function(servers){
+                    var hlinks = servers.map(function(e){
+                        parsed_glink.host = e;
+                        parsed_glink.protocol = 'http';
+                        return self.parsed_glink.href;
+                    });
+                    self.hlinks = hlinks;
+                    return cb(hlinks);
+                });
             }
         });
     };
@@ -138,3 +145,23 @@ function DownloadManager(glink)
     };
     self.__init__(glink);
 }
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+	function(details){
+        var headers = details.requestHeaders;
+        console.log(details);
+		var index = -1;
+		for(var i=0; i<headers.length; i++){
+			if(headers[i].name == 'Cookie'){
+				index = i;
+				break;
+			}
+		}
+		if(index >= 0){
+			headers.splice(index, 1);
+		}
+		return {'requestHeaders': headers};
+	},
+    {urls: ["*://pan.baidu.com/api/sharedownload*", "*://pan.baidu.com/api/download*"]},
+    ['blocking', 'requestHeaders']
+);
