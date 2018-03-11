@@ -8,7 +8,7 @@ function DownloadManager(glink)
     var self = this;
 
     // update server list in config
-    self.updateServers = function(hlinks){
+    self.__updateServers__ = function(hlinks){
         var new_servers = hlinks.map(function(e){
             return new URL(e).host;
         });
@@ -18,7 +18,15 @@ function DownloadManager(glink)
         config.servers = config.servers.concat(additional);
         chrome.storage.local.set({'config': config});
     };
-    self.filterHLinks = function(hlinks, cb){
+    self.getHLink = function(){
+        self.__getHLinks__(function(hlinks){
+            self.__filterHLinks__(hlinks, function(filtered){
+                page.fileList.updateHLink(filtered[0]);
+                updatePopup();
+            });
+        });
+    };
+    self.__filterHLinks__ = function(hlinks, cb){
         var filtered = [];
         var promises = hlinks.map(function(e, i){
             var promise = $.ajax({
@@ -40,7 +48,7 @@ function DownloadManager(glink)
             cb(filtered);
         });
     };
-    self.getHLinks = function(cb){
+    self.__getHLinks__ = function(cb){
         var parsed_glink = self.parsed_glink;
         if(!page.bduss){
             var hlinks = config.servers.map(function(e){
@@ -67,14 +75,14 @@ function DownloadManager(glink)
                     return e.url;
                 });
                 self.hlinks = hlinks;
-                self.updateServers(hlinks);
+                self.__updateServers__(hlinks);
                 return cb(hlinks);
             }
         });
     };
     self.download = function(){
-        self.getHLinks(function(hlink){
-            self.filterHLinks(hlink, self.__download__);
+        self.__getHLinks__(function(hlink){
+            self.__filterHLinks__(hlink, self.__download__);
         });
     };
     self.__download__ = function(hlinks){
@@ -119,7 +127,7 @@ function DownloadManager(glink)
             }
         });
     };
-    self.init = function(glink){
+    self.__init__ = function(glink){
         // get rpc interface
         if(!config.rpc){
             config.rpc = config.rpcList[0];
@@ -128,5 +136,5 @@ function DownloadManager(glink)
         self.rpcInterface = rpc.protocol+'://'+rpc.host+':'+rpc.port+'/jsonrpc';
         self.parsed_glink = new URL(glink);
     };
-    self.init(glink);
+    self.__init__(glink);
 }

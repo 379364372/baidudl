@@ -14,7 +14,7 @@ function SharePage(url)
         self.yunData = [];
         self.fileList = [];
         chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDUSS'}, function(cookie){
-            self.bduss = cookie.value;
+            self.bduss = cookie? cookie.value:'';
         });
     };
 
@@ -89,6 +89,10 @@ function SharePage(url)
                 self.fileList.updateGLinks(res.list);
                 if(verify)self.vcode = false;
                 updatePopup();
+                res.list.forEach(function(e){
+                    var glink = e.dlink;
+                    new DownloadManager(glink).getHLink();
+                });
             }
         });
     };
@@ -167,6 +171,13 @@ function FileList(fileList)
             self.fileList[idx].glink = e.dlink;
             self.fileList[idx].md5 = e.md5;
         });
+    };
+    self.updateHLink = function(hlink){
+        var parsed_hlink = new URL(hlink);
+        var fidComp = parsed_hlink.searchParams.get('fid').split('-');
+        var fsid = parseInt(fidComp[fidComp.length-1]);
+        var idx = self.fsidList.indexOf(fsid);
+        self.fileList[idx].hlink = hlink;
     };
     self.init(fileList);
 }
