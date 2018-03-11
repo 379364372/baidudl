@@ -64,14 +64,14 @@ function SharePage(url)
     };
 
     // get glink
-    self.getGlink = function(verify=false, vcode=undefined, input=undefined){
+    self.getGLinks = function(verify=false, vcode=undefined, input=undefined){
         var url = "http://pan.baidu.com/api/sharedownload?sign="+self.yunData.sign+"&timestamp="+self.yunData.timestamp;
         var data = "encrypt=0&product=share&uk="+self.yunData.uk+"&primaryid="+self.yunData.shareid;
         data += '&fid_list='+JSON.stringify(self.fileList.fsidList);
         data += "&extra="+self.extra;
         if(verify){
             if(!vcode || !input){
-                console.log('Glink verification error.');
+                console.log('GLink verification error.');
                 return;
             }
             data += "&vcode_str="+vcode+"&vcode_input="+input;
@@ -86,7 +86,7 @@ function SharePage(url)
                     new Error(res.errno).handle();
                     return;
                 }
-                self.fileList.updateGlink(res.list);
+                self.fileList.updateGLinks(res.list);
                 if(verify)self.vcode = false;
                 updatePopup();
             }
@@ -106,10 +106,10 @@ function SharePage(url)
                 if(self.url.hash.indexOf('list') < 0 || getURLParameter(self.url, 'path') == '%2F'){
                     self.fileList = new FileList(fileList);
                     updatePopup();
-                    self.getGlink();
+                    self.getGLinks();
                 }
                 else{
-                    self.listDir(self.getGlink);
+                    self.listDir(self.getGLinks);
                 }
             });
         });
@@ -161,7 +161,7 @@ function FileList(fileList)
             self.fsidList.push(e.fs_id);
         });
     };
-    self.updateGlink = function(fileList){
+    self.updateGLinks = function(fileList){
         fileList.forEach(function(e){
             var idx = self.fsidList.indexOf(e.fs_id);
             self.fileList[idx].glink = e.dlink;

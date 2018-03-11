@@ -1,3 +1,4 @@
+// fast call to download a file
 function download(glink){
     new DownloadManager(glink).download();
 }
@@ -5,6 +6,8 @@ function download(glink){
 function DownloadManager(glink)
 {
     var self = this;
+
+    // update server list in config
     self.updateServers = function(hlinks){
         var new_servers = hlinks.map(function(e){
             return new URL(e).host;
@@ -17,21 +20,23 @@ function DownloadManager(glink)
     };
     self.filterHLinks = function(hlinks, cb){
         var filtered = [];
-        var promises = hlinks.map(function(e){
+        var promises = hlinks.map(function(e, i){
             var promise = $.ajax({
                 url: e,
                 type: 'HEAD',
                 timeout: 3000,
                 success: function(res, status, request){
                     if(request.getResponseHeader('Content-MD5')){
-                        filtered.push(e);
+                        filtered[i] = e;
                     }
                 }
             });
             return promise;
         });
         Q.allSettled(promises).then(function(res){
-            console.log(filtered);
+            filtered = filtered.filter(function(e){
+                if(e)return true;
+            });
             cb(filtered);
         });
     };

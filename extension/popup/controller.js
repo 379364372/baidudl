@@ -58,7 +58,7 @@ app.controller('control', function($scope, $http){
 	$scope.download = function(idx){
 		// check glink
 		if(!$scope.fileList[idx].glink){
-			$scope.message = 'Warning: Glink should be generated before download!';
+			$scope.message = 'Warning: GLink should be generated before download!';
 			return;
 		}
 		$scope.background.download($scope.fileList[idx].glink);
@@ -69,7 +69,7 @@ app.controller('control', function($scope, $http){
 	};
 	// verify and get glinks
 	$scope.verify = function(input){
-		$scope.background.page.getGlink(true, $scope.vcode, input);
+		$scope.background.page.getGLinks(true, $scope.vcode, input);
 		$scope.input = '';
 	};
 
