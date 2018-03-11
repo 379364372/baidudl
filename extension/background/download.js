@@ -4,7 +4,7 @@ function download(glink){
 
 function DownloadManager(glink)
 {
-    self = this;
+    var self = this;
     self.updateServers = function(hlinks){
         var new_servers = hlinks.map(function(e){
             return new URL(e).host;

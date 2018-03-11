@@ -1,4 +1,4 @@
-var app = angular.module('app', []);
+var app = angular.module('popup', []);
 app.controller('control', function($scope, $http){
 
 	// init
@@ -10,6 +10,7 @@ app.controller('control', function($scope, $http){
 		$scope.fsidList = page.fileList.fsidList;
 		$scope.page = page.pageno;
 		$scope.vcode = page.vcode;
+		$scope.input = '';
 		$scope.background = background;
 		$scope.message = 'Ready.';
 		$scope.textarea = angular.element(document.getElementById('copy'));
@@ -17,6 +18,7 @@ app.controller('control', function($scope, $http){
 	$scope.clear = function(){};
 	$scope.generate = function(){};
 	$scope.generateAll = function(){};
+	// copy link to clipboard
 	$scope.copy = function(idx, type){
 		if(type == 'hlink')$scope.textarea.val($scope.fileList[idx].hlink);
 		else $scope.textarea.val($scope.fileList[idx].glink);
@@ -29,6 +31,7 @@ app.controller('control', function($scope, $http){
 		else $scope.message = "Copy failure";
 		$scope.textarea.val('');
 	};
+	// copy all links to clipboard
 	$scope.copyAll = function(type){
 		var links = [];
 		for(var i=0; i<$scope.fileList.length; i++){
@@ -51,6 +54,7 @@ app.controller('control', function($scope, $http){
 		else $scope.message = "Copy failure";
 		$scope.textarea.val('');
 	};
+	// download a file through rpc
 	$scope.download = function(idx){
 		// check glink
 		if(!$scope.fileList[idx].glink){
@@ -59,12 +63,16 @@ app.controller('control', function($scope, $http){
 		}
 		$scope.background.download($scope.fileList[idx].glink);
 	};
-
+	// refresh vcode
 	$scope.refresh = function(){
 		new $scope.background.Error(-20).handle();
 	};
+	// verify and get glinks
 	$scope.verify = function(input){
 		$scope.background.page.getGlink(true, $scope.vcode, input);
+		$scope.input = '';
 	};
+
+	// start init
 	$scope.init(chrome.extension.getBackgroundPage());
 });

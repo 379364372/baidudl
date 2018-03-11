@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset=utf-8 />
+		<title>baidudl for Chrome Settings</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
+		<link href="../icon/icon16.png" rel="shortcut icon" type="image/ico" />
+		<style type="text/css">
+		body,html {
+			height: 100%;
+		}
+		#logo{
+			margin-left: 100px;
+			background-image: url(images/logo128.png);
+			background-size: 128px 128px;
+			width: 128px;
+			height: 128px;
+		}
+		.navbar{
+			background-color: #8191F1;
+			padding: 15px 15px 0 15px;
+			color: white;
+			z-index: 200;
+			box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+		}
+		fieldset {
+			margin: 10px 0;
+			padding: 10px 8px;
+		}
+		legend{
+			margin-bottom: 0px;
+		}
+		.input-small{
+			max-width: 40px;
+		}
+		.input-medium{
+			max-width: 60px;
+		}
+		.rpc-host{
+			min-width: 100px;
+		}
+		.rpc_details {
+			margin-bottom: 8px; 
+		}
+		#add-rpc{
+			margin-left: 10px;
+		}
+		hr{
+			margin-bottom: 30px;
+		}
+		</style>
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div id='app'ng-app="options" ng-controller="control" class="container">
+			<div class="form-horizontal">
+				<fieldset id="rpc-list">
+					<legend>RPC settings</legend>
+					<div ng-repeat="x in rpcList" class="control-group rpc_details">
+						<label class="control-label">JSON-RPC</label>
+						<div class="controls">
+							<input type="text" class="input-medium rpc-name" ng-model="x.name" placeholder="RPC Name">
+							<input type="text" class="input-small rpc-protocol" ng-model="x.protocol" placeholder="http">
+							<span>://</span>
+							<input type="text" class="input-xlarge rpc-host" ng-model="x.host" placeholder="RPC Host">
+							<input type="text" class="input-small rpc-port" ng-model="x.port" placeholder="Port">
+							<br>
+							<span> token:</span>
+							<input type="text" class="input-medium rpc-token" ng-model="x.token">
+							<span>(Leave it blank if no token is required)</span>
+						</div>
+						<hr>
+					</div>
+				</fieldset>
+			</div>
+			<div class="footer">
+				<button class="btn" id="add-rpc" ng-click="add()">Add RPC</button>
+				<div style="float:right">
+						<button type="btn" class="btn btn-success" ng-click="save()">Save</button>
+						<button class="btn" ng-click="reset()">Reset</button>
+				</div>
+			</div>
+		</div>
+		<script src="../resource/angular.min.js"></script>
+		<script src="controller.js"></script>		 
+	</body>
+</html>
