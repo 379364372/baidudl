@@ -24,6 +24,7 @@
 		"scripts": [
 			"resource/jquery.min.js",
 			"resource/angular.min.js",
+			"resource/q.js",
 			"background/background.js",
 			"background/utilities.js",
 			"background/models.js",
