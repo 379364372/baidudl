@@ -65,7 +65,7 @@ app.controller('control', function($scope, $http){
 	// download a file through rpc
 	$scope.download = function(idx){
 		// check glink
-		if(!$scope.fileList[idx].hlinks){
+		if(!$scope.fileList[idx].hlinks || !$scope.fileList[idx].hlinks.length){
 			$scope.message = 'Warning: HLinks should be generated before download!';
 			return;
 		}

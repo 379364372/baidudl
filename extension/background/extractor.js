@@ -5,7 +5,7 @@ function Extractor(file)
     self.getHLinks = function(){
         self.__getHLinks__(function(hlinks){
             self.__filterHLinks__(hlinks, function(filtered){
-                page.fileList.updateHLinks(filtered);
+                page.fileList.updateHLinks(self.file, filtered);
                 updatePopup();
             });
         });
@@ -96,6 +96,7 @@ function Extractor(file)
     };
 
     self.__init__ = function(file){
+        self.file = file;
         self.parsed_glink = new URL(file.glink);
     };
     self.__init__(file);

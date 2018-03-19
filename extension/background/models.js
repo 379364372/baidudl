@@ -174,10 +174,8 @@ function FileList(fileList)
             self.fileList[idx].md5 = e.md5;
         });
     };
-    self.updateHLinks = function(hlinks){
-        var parsed_hlink = new URL(hlinks[0]);
-        var fidComp = parsed_hlink.searchParams.get('fid').split('-');
-        var fsid = parseInt(fidComp[fidComp.length-1]);
+    self.updateHLinks = function(file, hlinks){
+        var fsid = file.fid;
         var idx = self.fsidList.indexOf(fsid);
         self.fileList[idx].hlinks = hlinks;
     };

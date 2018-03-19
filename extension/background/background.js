@@ -13,6 +13,7 @@ chrome.storage.local.get('config', function(result){
 			host	:	'127.0.0.1',
 			port	:	6800
 		};
+		// TODO: do operation to rank servers
 		config.servers = [
 			'd1.baidupcs.com',
 			'd2.baidupcs.com',
