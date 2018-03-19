@@ -28,6 +28,7 @@
 			"background/background.js",
 			"background/utilities.js",
 			"background/models.js",
+			"background/extractor.js",
 			"background/download.js"
 		]
 	},

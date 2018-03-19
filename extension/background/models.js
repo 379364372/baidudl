@@ -89,9 +89,11 @@ function SharePage(url)
                 self.fileList.updateGLinks(res.list);
                 if(verify)self.vcode = false;
                 updatePopup();
-                res.list.forEach(function(e){
-                    var glink = e.dlink;
-                    new DownloadManager(glink).getHLink();
+
+                // TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
+                // Or maybe there should be an option to toggle the modes.
+                self.fileList.fileList.forEach(function(e){
+                    new Extractor(e).getHLink();
                 });
             }
         });

@@ -61,7 +61,7 @@ app.controller('control', function($scope, $http){
 			$scope.message = 'Warning: GLink should be generated before download!';
 			return;
 		}
-		$scope.background.download($scope.fileList[idx].glink);
+		$scope.background.download($scope.fileList[idx]);
 	};
 	// refresh vcode
 	$scope.refresh = function(){
