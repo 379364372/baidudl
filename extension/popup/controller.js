@@ -5,15 +5,23 @@ app.controller('control', function($scope, $http){
 	$scope.init = function(background){
 		var page = background.page;
 		console.log('initializing popup');
-		$scope.message = 'Loading...';
-		$scope.fileList = page.fileList.fileList;
-		$scope.fsidList = page.fileList.fsidList;
-		$scope.page = page.pageno;
-		$scope.vcode = page.vcode;
-		$scope.input = '';
-		$scope.background = background;
-		$scope.message = 'Ready.';
-		$scope.textarea = angular.element(document.getElementById('copy'));
+		chrome.tabs.getSelected(null, function(tab){
+			if(!page || !page.url || tab.url != page.url.href){
+				background.refresh(new URL(tab.url));
+				$scope.init(background);
+				return;
+			}
+			$scope.$apply(function(){
+				$scope.message = 'Loading...';
+				$scope.fileList = page.fileList.fileList;
+				$scope.fsidList = page.fileList.fsidList;
+				$scope.page = page.pageno;
+				$scope.vcode = page.vcode;
+				$scope.input = '';
+				$scope.background = background;
+				$scope.textarea = angular.element(document.getElementById('copy'));
+			});
+		});
 	};
 	$scope.clear = function(){};
 	$scope.generate = function(){};

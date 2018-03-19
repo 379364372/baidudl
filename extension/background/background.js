@@ -57,20 +57,11 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	if(changeInfo.status != 'loading')return;
 
 	if(url.pathname == '/disk/home'){
-		chrome.pageAction.show(tabId);
-		if(url.hash.substr(0, 5) == '#list' && url.hash.indexOf('vmode') > 0){
-			page = new HomePage(url);
-			page.execute();
-		}
-		else if(url.hash.substr(0, 7) == '#search' && url.hash.indexOf('vmode') > 0){
-			page = new SearchPage(url);
-			page.execute();
-		}
-		else chrome.pageAction.hide(tabId);
+		chrome.pageAction.hide(tabId);
+		if(url.hash.substr(0, 5) == '#list')chrome.pageAction.show(tabId);
+		else if(url.hash.substr(0, 7) == '#search')chrome.pageAction.show(tabId);
 	}
 	else if(url.pathname.match(/s\/|share\/link/)){
 		chrome.pageAction.show(tabId);
-		page = new SharePage(url);
-		page.execute();
 	}
 });

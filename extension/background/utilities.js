@@ -124,6 +124,26 @@ function unshare(yunData, shareid, cb){
 	});
 }
 
+function refresh(url){
+	console.log('refreshing '+url.href);
+	if(url.host != 'pan.baidu.com')return;
+
+	if(url.pathname == '/disk/home'){
+		if(url.hash.substr(0, 5) == '#list' && url.hash.indexOf('vmode') > 0){
+			page = new HomePage(url);
+			page.execute();
+		}
+		else if(url.hash.substr(0, 7) == '#search' && url.hash.indexOf('vmode') > 0){
+			page = new SearchPage(url);
+			page.execute();
+		}
+	}
+	else if(url.pathname.match(/s\/|share\/link/)){
+		page = new SharePage(url);
+		page.execute();
+	}
+}
+
 function updatePopup(){
 	var views = chrome.extension.getViews({
 		type: "popup"

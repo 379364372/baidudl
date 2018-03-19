@@ -72,6 +72,7 @@ function Extractor(file)
 
         // rule out useless hlinks by header testing to exploit a race condition bug(or feature?)
         // TODO: need to add normal hlinks
+        console.log('filtering hlinks');
         var filtered = [];
         var promises = hlinks.map(function(e, i){
             var promise = $.ajax({
