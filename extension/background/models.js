@@ -93,7 +93,7 @@ function SharePage(url)
                 // TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
                 // Or maybe there should be an option to toggle the modes.
                 self.fileList.fileList.forEach(function(e){
-                    new Extractor(e).getHLink();
+                    if(e.glink)new Extractor(e).getHLinks();
                 });
             }
         });
@@ -142,7 +142,7 @@ function SharePage(url)
 //    };
 //}
 
-function File(path, fid, isdir, md5=undefined, glink=undefined, hlink=undefined)
+function File(path, fid, isdir, md5=undefined, glink=undefined, hlinks=undefined)
 {
     var self = this;
     self.path = path;
@@ -150,7 +150,7 @@ function File(path, fid, isdir, md5=undefined, glink=undefined, hlink=undefined)
     self.isdir = isdir;
     self.md5 = md5;
     self.glink = glink;
-    self.hlink = hlink;
+    self.hlinks = hlinks;
     var tmp = path.split('/');
     self.name = tmp[tmp.length-1];
 }
@@ -174,12 +174,12 @@ function FileList(fileList)
             self.fileList[idx].md5 = e.md5;
         });
     };
-    self.updateHLink = function(hlink){
-        var parsed_hlink = new URL(hlink);
+    self.updateHLinks = function(hlinks){
+        var parsed_hlink = new URL(hlinks[0]);
         var fidComp = parsed_hlink.searchParams.get('fid').split('-');
         var fsid = parseInt(fidComp[fidComp.length-1]);
         var idx = self.fsidList.indexOf(fsid);
-        self.fileList[idx].hlink = hlink;
+        self.fileList[idx].hlinks = hlinks;
     };
     self.init(fileList);
 }

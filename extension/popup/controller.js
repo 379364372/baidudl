@@ -20,7 +20,7 @@ app.controller('control', function($scope, $http){
 	$scope.generateAll = function(){};
 	// copy link to clipboard
 	$scope.copy = function(idx, type){
-		if(type == 'hlink')$scope.textarea.val($scope.fileList[idx].hlink);
+		if(type == 'hlink')$scope.textarea.val($scope.fileList[idx].hlinks[0]);
 		else $scope.textarea.val($scope.fileList[idx].glink);
 		if(!$scope.textarea.val()){
 			$scope.message = "This field is empty";
@@ -40,8 +40,8 @@ app.controller('control', function($scope, $http){
 				links.push($scope.fileList[i].glink);
 			}
 			else{
-				if(!$scope.fileList[i].hlink)continue;
-				links.push($scope.fileList[i].hlink);
+				if(!$scope.fileList[i].hlinks)continue;
+				links.push($scope.fileList[i].hlinks[0]);
 			}
 		}
 		$scope.textarea.val(links.join('\n'));
@@ -57,8 +57,8 @@ app.controller('control', function($scope, $http){
 	// download a file through rpc
 	$scope.download = function(idx){
 		// check glink
-		if(!$scope.fileList[idx].glink){
-			$scope.message = 'Warning: GLink should be generated before download!';
+		if(!$scope.fileList[idx].hlinks){
+			$scope.message = 'Warning: HLinks should be generated before download!';
 			return;
 		}
 		$scope.background.download($scope.fileList[idx]);

@@ -2,10 +2,10 @@ function Extractor(file)
 {
     var self = this;
 
-    self.getHLink = function(){
+    self.getHLinks = function(){
         self.__getHLinks__(function(hlinks){
             self.__filterHLinks__(hlinks, function(filtered){
-                page.fileList.updateHLink(filtered[0]);
+                page.fileList.updateHLinks(filtered);
                 updatePopup();
             });
         });
@@ -103,7 +103,6 @@ function Extractor(file)
 chrome.webRequest.onBeforeSendHeaders.addListener(
 	function(details){
         var headers = details.requestHeaders;
-        console.log(details);
 		var index = -1;
 		for(var i=0; i<headers.length; i++){
 			if(headers[i].name == 'Cookie'){

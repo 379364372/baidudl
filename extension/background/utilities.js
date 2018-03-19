@@ -7,13 +7,13 @@ function get_user_yunData(cb){
 			var yunData = JSON.parse(code);
 			cb(yunData);
 		}
-	})
+	});
 }
 
 // get path parameter from url
 function getURLParameter(url, name) {
 	var x = url.hash.split('/');
-	var y = x[x.length-1].split('&')
+	var y = x[x.length-1].split('&');
 	for(var i=0; i<y.length; i++){
 		var e = y[i];
 		e = e.split('=');
@@ -40,14 +40,14 @@ function b64(t) {
 			e += "=";
 			break;
 		}
-		i = t.charCodeAt(r++),
-		e += s.charAt(n >> 2),
-		e += s.charAt((3 & n) << 4 | (240 & o) >> 4),
-		e += s.charAt((15 & o) << 2 | (192 & i) >> 6),
-		e += s.charAt(63 & i)
+		i = t.charCodeAt(r++);
+		e += s.charAt(n >> 2);
+		e += s.charAt((3 & n) << 4 | (240 & o) >> 4);
+		e += s.charAt((15 & o) << 2 | (192 & i) >> 6);
+		e += s.charAt(63 & i);
 	}
 	return e;
-};
+}
 
 // list search result
 function list_search(yunData, url, cb){
@@ -77,7 +77,7 @@ function list_search(yunData, url, cb){
 			}
 			cb(res.list);
 		}
-	})
+	});
 }
 
 // share file by fs_id
@@ -95,12 +95,12 @@ function share(yunData, fidlist, cb){
 				if(res.errno == 110)err_msg = "Error: this file has been shared too frequently";
 				database.status = 'error';
 				database.message = err_msg;
-				return
+				return;
 			}
 			console.log("Share success");
 			cb(res);
 		}
-	})
+	});
 }
 
 // unshare a file by its shareid
@@ -121,7 +121,7 @@ function unshare(yunData, shareid, cb){
 			console.log("Unshare success");
 			cb();
 		}
-	})
+	});
 }
 
 function updatePopup(){

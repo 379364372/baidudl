@@ -14,16 +14,34 @@ chrome.storage.local.get('config', function(result){
 			port	:	6800
 		};
 		config.servers = [
-    		'd11.baidupcs.com',
-    		'd1.baidupcs.com',
-    		'd7.baidupcs.com',
-    		'nbcache00.baidupcs.com',
-    		'nbcache03.baidupcs.com',
-    		'nj02all01.baidupcs.com',
-    		'yqall02.baidupcs.com',
-    		'bjbgp01.baidupcs.com',
-    		'allall01.baidupcs.com',
-    		'allall02.baidupcs.com'
+			'd1.baidupcs.com',
+			'd2.baidupcs.com',
+			'd4.baidupcs.com',
+			'd6.baidupcs.com',
+			'd7.baidupcs.com',
+			'd8.baidupcs.com',
+			'd9.baidupcs.com',
+			'd10.baidupcs.com',
+			'd11.baidupcs.com',
+			'd12.baidupcs.com',
+			'd13.baidupcs.com',
+			'd14.baidupcs.com',
+			'd16.baidupcs.com',
+			'nbcache00.baidupcs.com',
+			'nbcache02.baidupcs.com',
+			'nbcache03.baidupcs.com',
+			'nj02all01.baidupcs.com',
+			'yqall01.baidupcs.com',
+			'yqall02.baidupcs.com',
+			'yqall03.baidupcs.com',
+			'yqall04.baidupcs.com',
+			'yqall06.baidupcs.com',
+			'yqall07.baidupcs.com',
+			'bjbgp01.baidupcs.com',
+			'allall01.baidupcs.com',
+			'allall02.baidupcs.com',
+			'allall04.baidupcs.com',
+			'allall05.baidupcs.com'
                             ];
 		config.rpcList.push(tmp);
 		config.rpc = config.rpcList[0];

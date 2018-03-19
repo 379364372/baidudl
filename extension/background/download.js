@@ -8,9 +8,12 @@ function DownloadManager(file)
     var self = this;
 
     self.download = function(){
-        self.__getHLinks__(function(hlink){
-            self.__filterHLinks__(hlink, self.__download__);
-        });
+        if(!self.file.hlinks){
+            page.message = 'Warning: HLinks should be obtained before download!';
+            updatePopup();
+            return;
+        }
+        self.__download__(self.file.hlinks);
     };
     self.__download__ = function(hlinks){
         // prepare json request
@@ -61,6 +64,7 @@ function DownloadManager(file)
         }
         var rpc = config.rpc;
         self.rpcInterface = rpc.protocol+'://'+rpc.host+':'+rpc.port+'/jsonrpc';
+        self.file = file;
     };
     self.__init__(file);
 }
