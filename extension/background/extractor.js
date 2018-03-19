@@ -22,7 +22,7 @@ function Extractor(file)
         chrome.storage.local.set({'config': config});
         cb(config.servers);
     };
-    self.__getHLinks__ = function(cb){
+    self.__legacy_getHLinks__ = function(cb){
         var parsed_glink = self.parsed_glink;
 
         // if not login, use configured server list to create hlink list
@@ -30,7 +30,7 @@ function Extractor(file)
             var hlinks = config.servers.map(function(e){
                 parsed_glink.host = e;
                 parsed_glink.protocol = 'http';
-                return self.parsed_glink.href;
+                return parsed_glink.href;
             });
             self.hlinks = hlinks;
             return cb(hlinks);
@@ -60,18 +60,42 @@ function Extractor(file)
                     var hlinks = servers.map(function(e){
                         parsed_glink.host = e;
                         parsed_glink.protocol = 'http';
-                        return self.parsed_glink.href;
+                        return parsed_glink.href;
                     });
-                    self.hlinks = hlinks;
+                    self.hlinks = hlinks.concat(self.hlinks);
                     return cb(hlinks);
                 });
+            }
+        });
+    };
+    self.__getHLinks__ = function(cb){
+        var parsed_glink = self.parsed_glink;
+        var hlinks = config.servers.map(function(e){
+            parsed_glink.host = e;
+            parsed_glink.protocol = 'http';
+            return parsed_glink.href;
+        });
+        self.hlinks = hlinks;
+        $.ajax({
+            url: self.file.glink,
+            type: 'HEAD',
+            timeout: 3000,
+            success: function(res, status, request){
+                var tmp_hlink = request.getResponseHeader('url');
+                var parsed_hlink = new URL(tmp_hlink);
+                var hlinks = config.servers.map(function(e){
+                    parsed_hlink.host = e;
+                    parsed_hlink.protocol = 'http';
+                    return parsed_hlink.href;
+                });
+                self.hlinks = self.hlinks.concat(hlinks);
+                cb(self.hlinks);
             }
         });
     };
     self.__filterHLinks__ = function(hlinks, cb){
 
         // rule out useless hlinks by header testing to exploit a race condition bug(or feature?)
-        // TODO: need to add normal hlinks
         console.log('filtering hlinks');
         var filtered = [];
         var promises = hlinks.map(function(e, i){
@@ -119,4 +143,31 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 	},
     {urls: ["*://pan.baidu.com/api/sharedownload*", "*://pan.baidu.com/api/download*"]},
     ['blocking', 'requestHeaders']
+);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+	function(details){
+        var headers = details.requestHeaders;
+		var index = -1;
+		for(var i=0; i<headers.length; i++){
+			if(headers[i].name == 'Cookie'){
+				index = i;
+				break;
+			}
+		}
+		if(index >= 0){
+			headers.splice(index, 1);
+		}
+		return {'requestHeaders': headers};
+	},
+    {urls: ["*://d.pcs.baidu.com/file/*"]},
+    ['blocking', 'requestHeaders']
+);
+chrome.webRequest.onHeadersReceived.addListener(
+	function(details){
+        details.responseHeaders.push({name: 'url', value: details.url});
+        return {'responseHeaders': details.responseHeaders};
+	},
+    {urls: ["*://*.baidupcs.com/file/*"]},
+    ['blocking', 'responseHeaders']
 );

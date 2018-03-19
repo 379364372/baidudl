@@ -42,7 +42,10 @@ chrome.storage.local.get('config', function(result){
 			'allall01.baidupcs.com',
 			'allall02.baidupcs.com',
 			'allall04.baidupcs.com',
-			'allall05.baidupcs.com'
+			'allall05.baidupcs.com',
+			'qdcache00.baidupcs.com',
+			'qdcache02.baidupcs.com',
+			'qdcache03.baidupcs.com',
                             ];
 		config.rpcList.push(tmp);
 		config.rpc = config.rpcList[0];
