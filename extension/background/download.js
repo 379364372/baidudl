@@ -20,12 +20,14 @@ function DownloadManager(file)
         var hlink = new URL(hlinks[0]);
 		options = {};
 		options.split = config.maxThreads+'';
+        options.checksum = 'md5='+self.file.md5;
+        options['check-integrity'] = 'true';
 		options['max-connection-per-server'] = '16';
 		options['user-agent'] = navigator.userAgent;
 		options['check-certificate'] = 'false';
 		options['min-split-size'] = '1m';
-		options['summary-interal'] = '0';
-		options.out = hlink.searchParams.get('fin');
+        options['summary-interal'] = '0';
+		options.out = self.file.name;
 		params = [];
 		if (config.token && config.token.length > 0) {
 			params.push('token:'+config.token);
