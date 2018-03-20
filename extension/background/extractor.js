@@ -22,21 +22,29 @@ function Extractor(file)
         chrome.storage.local.set({'config': config});
         cb(config.servers);
     };
-    self.__legacy_getHLinks__ = function(cb){
+    self.__getHLinks__ = function(cb){
+
+        // exploit a race condition bug to get unlimited speed
+        var parsed_glink = self.parsed_glink;
+        var hlinks = config.servers.map(function(e){
+            parsed_glink.host = e;
+            parsed_glink.protocol = 'http';
+            return parsed_glink.href;
+        });
+        self.hlinks = hlinks;
+
+        if(!page.bduss){
+            self.__anonymous_getHLinks__(cb);
+            return;
+        }
+        else{
+            self.__login_getHLinks__(cb);
+            return;
+        }
+    };
+    self.__login_getHLinks__ = function(cb){
         var parsed_glink = self.parsed_glink;
 
-        // if not login, use configured server list to create hlink list
-        if(!page.bduss){
-            var hlinks = config.servers.map(function(e){
-                parsed_glink.host = e;
-                parsed_glink.protocol = 'http';
-                return parsed_glink.href;
-            });
-            self.hlinks = hlinks;
-            return cb(hlinks);
-        }
-
-        // if logged in, grab hlink list
         var pathnames = parsed_glink.pathname.split('/');
         var url = 'https://d.pcs.baidu.com/rest/2.0/pcs/file?time='+parsed_glink.searchParams.get('time')+'&version=2.2.0&vip=1&path='+pathnames[pathnames.length-1]+'&fid='+parsed_glink.searchParams.get('fid')+'&rt=sh&sign='+parsed_glink.searchParams.get('sign')+'&expires=8h&chkv=1&method=locatedownload&app_id=250528&esl=0&ver=4.0';
         $.ajax({
@@ -55,27 +63,21 @@ function Extractor(file)
                 var hlinks = res.urls.map(function(e){
                     return e.url;
                 });
-                self.hlinks = hlinks;
+                
+                var parsed_hlink = new URL(hlinks[0]);
                 self.__updateServers__(hlinks, function(servers){
                     var hlinks = servers.map(function(e){
-                        parsed_glink.host = e;
-                        parsed_glink.protocol = 'http';
-                        return parsed_glink.href;
+                        parsed_hlink.host = e;
+                        parsed_hlink.protocol = 'http';
+                        return parsed_hlink.href;
                     });
-                    self.hlinks = hlinks.concat(self.hlinks);
-                    return cb(hlinks);
+                    self.hlinks = self.hlinks.concat(hlinks);
+                    return cb(self.hlinks);
                 });
             }
         });
     };
-    self.__getHLinks__ = function(cb){
-        var parsed_glink = self.parsed_glink;
-        var hlinks = config.servers.map(function(e){
-            parsed_glink.host = e;
-            parsed_glink.protocol = 'http';
-            return parsed_glink.href;
-        });
-        self.hlinks = hlinks;
+    self.__anonymous_getHLinks__ = function(cb){
         $.ajax({
             url: self.file.glink,
             type: 'HEAD',

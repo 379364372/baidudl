@@ -7,6 +7,7 @@ function SharePage(url)
     var self = this;
     // init
     self.init = function(url){
+        console.log('initializing share page...');
         self.url = url;
         self.pageno = 1;
         self.vcode = false;
@@ -20,15 +21,19 @@ function SharePage(url)
 
     // get verification parameter extra
     self.getExtra = function(cb){
+        console.log('getting parameter extra...');
         chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDCLND'}, function(cookie){
-            var tmp = decodeURIComponent(cookie.value);
-            self.extra = encodeURIComponent(JSON.stringify({sekey:tmp}));
+            if(cookie){
+                var tmp = decodeURIComponent(cookie.value);
+                self.extra = encodeURIComponent(JSON.stringify({sekey:tmp}));
+            }
             cb();
         });
     };
 
     // get yunData in share page
     self.getYunData = function(cb){
+        console.log('getting yunData in share page...');
         $.ajax({
             url: self.url.href,
             success: function(html){
@@ -37,12 +42,18 @@ function SharePage(url)
                 var yunData = JSON.parse(data);
                 self.yunData = yunData;
                 cb();
+            },
+            error: function(res0, res1, res2){
+                console.log(res0);
+                console.log(res1);
+                console.log(res2);
             }
         });
     };
 
     // list dir
     self.listDir = function(cb){
+        console.log('listing dir...');
         $.ajax({
             url: 'https://pan.baidu.com/share/list?uk='+self.yunData.uk+"&shareid="+self.yunData.shareid+'&dir='+getURLParameter(self.url, 'path')+"&bdstoken="+self.yunData.bdstoken+"&num=100&order=time&desc=1&clienttype=0&showempty=0&web=1&page="+self.pageno,
             success: function(res){
@@ -65,6 +76,7 @@ function SharePage(url)
 
     // get glink
     self.getGLinks = function(verify=false, vcode=undefined, input=undefined){
+        console.log('getting glink list...');
         var url = "http://pan.baidu.com/api/sharedownload?sign="+self.yunData.sign+"&timestamp="+self.yunData.timestamp;
         var data = "encrypt=0&product=share&uk="+self.yunData.uk+"&primaryid="+self.yunData.shareid;
         data += '&fid_list='+JSON.stringify(self.fileList.fsidList);
@@ -100,7 +112,7 @@ function SharePage(url)
     };
     // main logic in share page
     self.execute = function(){
-        console.log('share page');
+        console.log('share page main logic starts');
         self.getExtra(function(){
             self.getYunData(function(){
                 var fileList = self.yunData.file_list.list;
@@ -168,6 +180,7 @@ function FileList(fileList)
         });
     };
     self.updateGLinks = function(fileList){
+        console.log('updating glink list');
         fileList.forEach(function(e){
             var idx = self.fsidList.indexOf(e.fs_id);
             self.fileList[idx].glink = e.dlink;
@@ -175,6 +188,7 @@ function FileList(fileList)
         });
     };
     self.updateHLinks = function(file, hlinks){
+        console.log('updating hlink list');
         var fsid = file.fid;
         var idx = self.fsidList.indexOf(fsid);
         self.fileList[idx].hlinks = hlinks;
