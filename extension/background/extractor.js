@@ -18,6 +18,7 @@ function Extractor(file)
         var additional = new_servers.filter(function(item){
             return config.servers.indexOf(item) < 0;
         });
+        if(additional.length > 0)console.log(additional);
         config.servers = config.servers.concat(additional);
         chrome.storage.local.set({'config': config});
         cb(config.servers);

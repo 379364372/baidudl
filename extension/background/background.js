@@ -32,6 +32,12 @@ chrome.storage.local.get('config', function(result){
 			'nbcache02.baidupcs.com',
 			'nbcache03.baidupcs.com',
 			'nj02all01.baidupcs.com',
+			'nj01ct01.baidupcs.com',
+			'nj01ct02.baidupcs.com',
+			'nj01ct03.baidupcs.com',
+			'nj01ct04.baidupcs.com',
+			'nj01ct06.baidupcs.com',
+			'nj01ct07.baidupcs.com',
 			'yqall01.baidupcs.com',
 			'yqall02.baidupcs.com',
 			'yqall03.baidupcs.com',
@@ -62,7 +68,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 
 	if(url.pathname == '/disk/home'){
 		chrome.pageAction.hide(tabId);
-		if(url.hash.substr(0, 5) == '#list')chrome.pageAction.show(tabId);
+		if(url.hash.substr(0, 5) == '#list' | url.hash.substr(0, 5) == '#/all')chrome.pageAction.show(tabId);
 		else if(url.hash.substr(0, 7) == '#search')chrome.pageAction.show(tabId);
 	}
 	else if(url.pathname.match(/s\/|share\/link/)){

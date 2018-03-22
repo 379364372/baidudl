@@ -32,7 +32,7 @@ function SharePage(url)
     };
 
     // get yunData in share page
-    self.getYunData = function(cb){
+    self.getShareYunData = function(cb){
         console.log('getting yunData in share page...');
         $.ajax({
             url: self.url.href,
@@ -114,7 +114,7 @@ function SharePage(url)
     self.execute = function(){
         console.log('share page main logic starts');
         self.getExtra(function(){
-            self.getYunData(function(){
+            self.getShareYunData(function(){
                 var fileList = self.yunData.file_list.list;
 
                 // handle duplicate redirections
@@ -136,15 +136,111 @@ function SharePage(url)
     self.init(url);
 }
 
-//function HomePage(url)
-//{
-//    var self = this;
-//    self.url = url;
-//    self.execute = function(){
-//        console.log('home page');
-//    };
-//}
-//
+function HomePage(url)
+{
+    var self = this;
+
+    // init
+    self.init = function(url){
+        console.log('initializing home page');
+        self.shorturl = '';
+        self.shareid = '';
+        self.url = url;
+        self.pageno = 1;
+        self.yunData = [];
+        self.fileList = [];
+    };
+
+    // get yunData in home page
+    self.getUserYunData = function(cb){
+        console.log('getting yunData in home page...');
+        $.ajax({
+            url: self.url.href,
+            success: function(html){
+                var code = html.match(/var context={.*};/);
+			    code = code[0].substr(12, code[0].length-13);
+			    var yunData = JSON.parse(code);
+                self.yunData = yunData;
+                cb();
+            },
+            error: function(res0, res1, res2){
+                console.log(res0);
+                console.log(res1);
+                console.log(res2);
+            }
+        });
+    };
+
+    // list dir
+    self.listDir = function(cb){
+        console.log('listing dir...');
+        $.ajax({
+            url: 'https://pan.baidu.com/api/list?dir='+getURLParameter(self.url, 'path')+'&bdstoken='+self.yunData.bdstoken+'&num=100&order=name&desc=1&clienttype=0&showempty=0&web=1&page='+self.pageno+'&channel=chunlei&web=1&app_id=250528',
+            success: function(res){
+                // if error is encountered
+                if(res.errno != 0 ){
+                    new Error(res.errno).handle();
+                    return;
+                }
+                console.log("List dir succeeds");
+                // good, we make it
+                if(res.list.length == 0){
+                    return;
+                }
+                self.fileList = new FileList(res.list);
+                updatePopup();
+                cb();
+            }
+        });
+    };
+
+    // share file by fsidList
+    self.share = function(cb){
+    	$.ajax({
+    		type: "POST",
+    		url: "https://pan.baidu.com/share/set?web=1&channel=chunlei&web=1&bdstoken="+self.yunData.bdstoken+"&clienttype=0",
+    		data: "fid_list="+JSON.stringify(self.fileList.fsidList)+"&schannel=0&channel_list=%5B%5D&period=0",
+    		dataType: "json",
+    		success: function(res){
+    			if(res.errno != 0){
+                    new Error(res.errno).handle();
+    				return;
+    			}
+                console.log("Share success");
+                console.log(res);
+                self.shorturl = res.shorturl;
+                self.shareid = res.shareid;
+    			cb();
+    		}
+    	});
+    };
+
+    // unshare a file by its shareid
+    self.unshare = function(){
+    	$.ajax({
+    		type: "POST",
+    		url: "https://pan.baidu.com/share/cancel?bdstoken="+self.yunData.bdstoken+"&channel=chunlei&web=1&clienttype=0",
+    		data: "shareid_list=%5B"+self.shareid+"%5D",
+    		dataType: "json",
+    		success: function(res){
+    			if(res.errno != 0){
+                    new Error(res.errno).handle();
+    				return;
+    			}
+    			console.log("Unshare success");
+    		}
+    	});
+    };
+
+    self.execute = function(){
+        self.getUserYunData(function(){
+            self.listDir(function(){});
+        });
+    };
+
+    self.init(url);
+}
+
 //function SearchPage(url)
 //{
 //    var self = this;

@@ -23,6 +23,8 @@ app.controller('control', function($scope, $http){
 			});
 		});
 	};
+
+	// TODO: clearcache should simply use refresh()
 	$scope.clear = function(){};
 	$scope.generate = function(){};
 	$scope.generateAll = function(){};

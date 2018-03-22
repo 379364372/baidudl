@@ -1,18 +1,6 @@
-function get_user_yunData(cb){
-	$.ajax({
-		url: 'https://pan.baidu.com/disk/home',
-		success: function(res){
-			var code = res.match(/var context={.*};/);
-			code = code[0].substr(12, code[0].length-13);
-			var yunData = JSON.parse(code);
-			cb(yunData);
-		}
-	});
-}
-
 // get path parameter from url
 function getURLParameter(url, name) {
-	var x = url.hash.split('/');
+	var x = url.hash.split(/[\?\/]/);
 	var y = x[x.length-1].split('&');
 	for(var i=0; i<y.length; i++){
 		var e = y[i];
@@ -80,56 +68,12 @@ function list_search(yunData, url, cb){
 	});
 }
 
-// share file by fs_id
-function share(yunData, fidlist, cb){
-	$.ajax({
-		type: "POST",
-		url: "https://pan.baidu.com/share/set?web=1&channel=chunlei&web=1&bdstoken="+yunData.bdstoken+"&clienttype=0",
-		data: "fid_list="+JSON.stringify(fidlist)+"&schannel=0&channel_list=%5B%5D&period=0",
-		dataType: "json",
-		success: function(res){
-			if(res.errno != 0){
-				console.log(res);
-				var err_msg = "Error: cant't share this file";
-				if(res.errno == -3)err_msg = "Error: this is not your file, you can't share it";
-				if(res.errno == 110)err_msg = "Error: this file has been shared too frequently";
-				database.status = 'error';
-				database.message = err_msg;
-				return;
-			}
-			console.log("Share success");
-			cb(res);
-		}
-	});
-}
-
-// unshare a file by its shareid
-function unshare(yunData, shareid, cb){
-	$.ajax({
-		type: "POST",
-		url: "https://pan.baidu.com/share/cancel?bdstoken="+yunData.bdstoken+"&channel=chunlei&web=1&clienttype=0",
-		data: "shareid_list=%5B"+shareid+"%5D",
-		dataType: "json",
-		success: function(d){
-			if(d.errno != 0){
-				console.log(d);
-				var err_msg = "Warning: can't auto unshare the file";
-				var event = new CustomEvent("error", {detail: err_msg});
-				window.dispatchEvent(event);
-				return;
-			}
-			console.log("Unshare success");
-			cb();
-		}
-	});
-}
-
 function refresh(url){
 	console.log('refreshing '+url.href);
 	if(url.host != 'pan.baidu.com')return;
 
 	if(url.pathname == '/disk/home'){
-		if(url.hash.substr(0, 5) == '#list' && url.hash.indexOf('vmode') > 0){
+		if((url.hash.substr(0, 5) == '#list'||url.hash.substr(0, 5) == '#/all') && url.hash.indexOf('vmode') > 0){
 			page = new HomePage(url);
 			page.execute();
 		}
