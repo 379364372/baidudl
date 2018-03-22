@@ -3,7 +3,8 @@ function injection(page){
 	console.log('Code exeucuted');
 
 	// logic for homepage
-	if(url.match(/https?:\/\/pan\.baidu\.com\/disk\/home#list/)){
+	console.log(url);
+	if(url.match(/https?:\/\/pan\.baidu\.com\/disk\/home#(list|\/all)/)){
 		console.log("Home page");
 		
 		// get sign parameter
