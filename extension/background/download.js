@@ -25,7 +25,7 @@ function DownloadManager(file)
 		options['max-connection-per-server'] = '16';
 		options['user-agent'] = navigator.userAgent;
 		options['check-certificate'] = 'false';
-		options['min-split-size'] = '512k';
+		options['min-split-size'] = '1m';
         options['summary-interal'] = '0';
 		options.out = self.file.name;
 		params = [];

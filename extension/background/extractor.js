@@ -47,7 +47,7 @@ function Extractor(file)
         var parsed_glink = self.parsed_glink;
 
         var pathnames = parsed_glink.pathname.split('/');
-        var url = 'https://d.pcs.baidu.com/rest/2.0/pcs/file?time='+parsed_glink.searchParams.get('time')+'&version=2.2.0&vip=1&path='+pathnames[pathnames.length-1]+'&fid='+parsed_glink.searchParams.get('fid')+'&rt=sh&sign='+parsed_glink.searchParams.get('sign')+'&expires=8h&chkv=1&method=locatedownload&app_id=250528&esl=0&ver=4.0';
+        var url = 'https://d.pcs.baidu.com/rest/2.0/pcs/file?dstime='+parsed_glink.searchParams.get('dstime')+'&version=2.2.0&vip=1&path='+pathnames[pathnames.length-1]+'&fid='+parsed_glink.searchParams.get('fid')+'&rt=sh&sign='+parsed_glink.searchParams.get('sign')+'&expires=8h&chkv=1&method=locatedownload&app_id=250528&esl=0&ver=4.0';
         $.ajax({
             url: url,
             dataType: 'json',
@@ -75,6 +75,10 @@ function Extractor(file)
                     self.hlinks = self.hlinks.concat(hlinks);
                     return cb(self.hlinks);
                 });
+            },
+            error: function(){
+                self.__anonymous_getHLinks__(cb);
+                return;
             }
         });
     };
