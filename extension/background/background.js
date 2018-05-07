@@ -52,7 +52,7 @@ chrome.storage.local.get('config', function(result){
 			'qdcache00.baidupcs.com',
 			'qdcache02.baidupcs.com',
 			'qdcache03.baidupcs.com',
-                            ];
+							];
 		config.rpcList.push(tmp);
 		config.rpc = config.rpcList[0];
 	}
@@ -75,3 +75,4 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 		chrome.pageAction.show(tabId);
 	}
 });
+

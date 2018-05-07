@@ -14,8 +14,7 @@ app.controller('control', function($scope, $http){
 			$scope.$apply(function(){
 				$scope.message = 'Loading...';
 				$scope.fileList = page.fileList.fileList;
-				$scope.fsidList = page.fileList.fsidList;
-				$scope.page = page.pageno;
+				$scope.page = page;
 				$scope.vcode = page.vcode;
 				$scope.input = '';
 				$scope.background = background;
@@ -26,8 +25,13 @@ app.controller('control', function($scope, $http){
 
 	// TODO: clearcache should simply use refresh()
 	$scope.clear = function(){};
-	$scope.generate = function(){};
-	$scope.generateAll = function(){};
+	$scope.generate = function(){
+		var filtered = $scope.fileList.filter(function(file){
+			if(file.check)return true;
+		});
+		$scope.background.generate(filtered);
+		$scope.uncheckAll();
+	};
 	// copy link to clipboard
 	$scope.copy = function(idx, type){
 		if(type == 'hlink')$scope.textarea.val($scope.fileList[idx].hlinks[0]);
@@ -64,6 +68,15 @@ app.controller('control', function($scope, $http){
 		else $scope.message = "Copy failure";
 		$scope.textarea.val('');
 	};
+
+	// check all checker boxes
+	$scope.checkAll = function(){
+		for(i=0; i<$scope.fileList.length; i+=1)$scope.fileList[i].check = true;
+	};
+	$scope.uncheckAll = function(){
+		for(i=0; i<$scope.fileList.length; i+=1)$scope.fileList[i].check = false;
+	};
+
 	// download a file through rpc
 	$scope.download = function(idx){
 		// check glink
@@ -82,7 +95,12 @@ app.controller('control', function($scope, $http){
 		$scope.background.page.getGLinks(true, $scope.vcode, input);
 		$scope.input = '';
 	};
+	// check whether this page is a share page
+	$scope.pageCheck = function(){
+		return !$scope.page || $scope.page instanceof $scope.background.SharePage;
+	};
 
 	// start init
 	$scope.init(chrome.extension.getBackgroundPage());
 });
+

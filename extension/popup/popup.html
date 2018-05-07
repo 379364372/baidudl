@@ -16,32 +16,35 @@
 		<div id='app' ng-app="popup" ng-csp ng-controller='control'>
 			<table>
 				<tr>
-					<td>File name</td>
+					<td><button ng-hide="pageCheck()" ng-click="checkAll()">CheckAll</button></td>
+					<td>FileName</td>
 					<td>GLinks</td>
 					<td><button ng-click="copyAll('glink')">CopyAll</button></td>
 					<td>HLinks</td>
 					<td><button ng-click="copyAll('hlink')">CopyAll</button></td>
-					<td><button ng-click="clear()">clearCache</td>
+					<td><button ng-click="clear()">ClearCache</td>
+					<td><button ng-hide="pageCheck()" ng-click="generate()">Generate</td>
 				</tr>
 				<tr ng-repeat="x in fileList">
-					<td><input style="width: 300px" type='text' value={{x.name}} ng-disabled='true'></td>
-					<td><input style="width: 50px"type='text' value={{x.glink}} ng-disabled='true'></td>
+					<td><input type="checkbox" ng-hide="pageCheck()" ng-model="x.check"></td>
+					<td><input style="width: 300px" type="text" value={{x.name}} ng-disabled="true"></td>
+					<td><input style="width: 50px"type="text" value={{x.glink}} ng-disabled="true"></td>
 					<td><button ng-click="copy($index, 'glink')">Copy</button></td>
-					<td><input style="width: 50px"type='text' value={{x.hlinks[0]}} ng-disabled='true'></td>
+					<td><input style="width: 50px"type='text' value={{x.hlinks[0]}} ng-disabled="true"></td>
 					<td><button ng-click="copy($index, 'hlink')">Copy</button></td>
-					<td><button ng-click="download($index)" ng-hide='x.isdir'>RPCDownload</td>
+					<td><button ng-click="download($index)" ng-hide="x.isdir">RPCDownload</td>
 				</tr>
 			</table>
-			<div><button ng-click="prev()">&lt;</button>{{page}}<button ng-click="next()">&gt;</button></div>
+			<div><button ng-click="prev()">&lt;</button>{{page.pageno}}<button ng-click="next()">&gt;</button></div>
 			<p>{{message}}</p>
-			<div ng-disabled='!vcode' ng-hide='!vcode'>
+			<div ng-disabled="!vcode" ng-hide="!vcode">
 				<img ng-src='https://pan.baidu.com/genimage?{{vcode}}'>
-				<input type='text' ng-model='input'>
+				<input type="text" ng-model="input">
 				<button ng-click="verify(input)">verify</button>
 				<button ng-click="refresh(input)">refresh</button>
 			</div>
 		</div>
-		<textarea id='copy'></textarea>
+		<textarea id="copy"></textarea>
 	</body>
 </html>
 

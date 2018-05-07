@@ -88,6 +88,14 @@ function refresh(url){
 	}
 }
 
+function generate(fileList){
+	var fsidList = fileList.map(function(file){
+		return file.fid;
+	});
+	page.share(fsidList, function(){
+	});
+}
+
 function updatePopup(){
 	var views = chrome.extension.getViews({
 		type: "popup"
@@ -102,7 +110,7 @@ function updatePopup(){
 		$scope.message = 'Loading...';
 		$scope.fileList = page.fileList.fileList;
 		$scope.fsidList = page.fileList.fsidList;
-		$scope.page = page.page;
+		$scope.page = page;
 		$scope.vcode = page.vcode;
 		$scope.message = page.message;
 	});
