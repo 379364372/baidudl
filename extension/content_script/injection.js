@@ -4,7 +4,7 @@ function injection(page){
 
 	// logic for homepage
 	console.log(url);
-	if(url.match(/https?:\/\/pan\.baidu\.com\/disk\/home#(list|\/all)/)){
+	if(url.match(/https?:\/\/pan\.baidu\.com\/disk\/home\??#(list|\/all)/)){
 		console.log("Home page");
 		
 		// get sign parameter
