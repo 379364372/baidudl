@@ -133,6 +133,7 @@ function Extractor(file)
 	self.__init__(file);
 }
 
+// remove cookie when sending requests
 chrome.webRequest.onBeforeSendHeaders.addListener(
 	function(details){
 		var headers = details.requestHeaders;
@@ -148,33 +149,34 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 		}
 		return {'requestHeaders': headers};
 	},
-	{urls: ["*://pan.baidu.com/api/sharedownload*", "*://pan.baidu.com/api/download*"]},
+	{urls: ["*://pan.baidu.com/api/sharedownload*", "*://pan.baidu.com/api/download*", "*://d.pcs.baidu.com/file/*"]},
 	['blocking', 'requestHeaders']
 );
 
-chrome.webRequest.onBeforeSendHeaders.addListener(
-	function(details){
-		var headers = details.requestHeaders;
-		var index = -1;
-		for(var i=0; i<headers.length; i++){
-			if(headers[i].name == 'Cookie'){
-				index = i;
-				break;
-			}
-		}
-		if(index >= 0){
-			headers.splice(index, 1);
-		}
-		return {'requestHeaders': headers};
-	},
-	{urls: ["*://d.pcs.baidu.com/file/*"]},
-	['blocking', 'requestHeaders']
-);
+// catch error when doing link filtering
 chrome.webRequest.onHeadersReceived.addListener(
 	function(details){
+		if(details.statusCode == 400){
+			// drop packet if status code is 400
+			return {redirectUrl: 'javascript:'};
+		}
+		else if(details.statusCode == 302){
+			// get redirect url
+			var header = details.responseHeaders.filter(function(e){
+				if(e.name == 'Location')return e;
+			})[0];
+			var url = new URL(header.value);
+
+			// drop packet if we know we are going to 401
+			if(url.pathname == '/401.html')return {redirectUrl: 'javascript:'};
+
+			// otherwise, we let the packet pass through
+			return {'responseHeaders': details.responseHeaders};
+		}
+		// set url header to indicate the real url
 		details.responseHeaders.push({name: 'url', value: details.url});
 		return {'responseHeaders': details.responseHeaders};
 	},
-	{urls: ["*://*.baidupcs.com/file/*"]},
+	{urls: ["*://*.baidupcs.com/file/*", "*://*/*.baidupcs.com/file/*"]},
 	['blocking', 'responseHeaders']
 );
