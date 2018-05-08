@@ -2,11 +2,12 @@ function Extractor(file)
 {
 	var self = this;
 
-	self.getHLinks = function(){
+	self.getHLinks = function(cb){
 		self.__getHLinks__(function(hlinks){
 			self.__filterHLinks__(hlinks, function(filtered){
 				page.fileList.updateHLinks(self.file, filtered);
 				updatePopup();
+				cb();
 			});
 		});
 	};

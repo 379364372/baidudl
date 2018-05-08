@@ -75,7 +75,7 @@ function SharePage(url)
 	};
 
 	// get glink
-	self.getGLinks = function(verify=false, vcode=undefined, input=undefined){
+	self.getGLinks = function(cb, verify=false, vcode=undefined, input=undefined){
 		console.log('getting glink list...');
 		var url = "http://pan.baidu.com/api/sharedownload?sign="+self.yunData.sign+"&timestamp="+self.yunData.timestamp;
 		var data = "encrypt=0&product=share&uk="+self.yunData.uk+"&primaryid="+self.yunData.shareid;
@@ -105,13 +105,13 @@ function SharePage(url)
 				// TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
 				// Or maybe there should be an option to toggle the modes.
 				self.fileList.fileList.forEach(function(e){
-					if(e.glink)new Extractor(e).getHLinks();
+					if(e.glink)new Extractor(e).getHLinks(cb);
 				});
 			}
 		});
 	};
 	// main logic in share page
-	self.execute = function(){
+	self.execute = function(cb){
 		console.log('share page main logic starts');
 		self.getExtra(function(){
 			self.getShareYunData(function(){
@@ -124,7 +124,7 @@ function SharePage(url)
 				if(self.url.hash.indexOf('list') < 0 || getURLParameter(self.url, 'path') == '%2F'){
 					self.fileList = new FileList(fileList);
 					updatePopup();
-					self.getGLinks();
+					self.getGLinks(cb);
 				}
 				else{
 					self.listDir(self.getGLinks);
@@ -149,6 +149,7 @@ function HomePage(url)
 		self.pageno = 1;
 		self.yunData = [];
 		self.fileList = [];
+		self.sharePage = undefined;
 	};
 
 	// get yunData in home page
@@ -207,7 +208,7 @@ function HomePage(url)
 					return;
 				}
 				console.log("Share success");
-				self.shorturl = res.shorturl;
+				self.shorturl = new URL(res.shorturl);
 				self.shareid = res.shareid;
 				cb();
 			}
@@ -264,7 +265,7 @@ function File(path, fid, isdir, md5=undefined, glink=undefined, hlinks=undefined
 
 function FileList(fileList)
 {
-	self = this;
+	var self = this;
 	self.init = function(fileList){
 		self.fileList = [];
 		self.fsidList = [];
@@ -287,6 +288,14 @@ function FileList(fileList)
 		var fsid = file.fid;
 		var idx = self.fsidList.indexOf(fsid);
 		self.fileList[idx].hlinks = hlinks;
+	};
+	self.merge = function(fileList){
+		fileList.fsidList.forEach(function(e, i){
+			var idx = self.fsidList.indexOf(e);
+			if(fileList.fileList[i].glink)self.fileList[idx].glink = fileList.fileList[i].glink;
+			if(fileList.fileList[i].hlinks)self.fileList[idx].hlinks = fileList.fileList[i].hlinks;
+			if(fileList.fileList[i].md5)self.fileList[idx].md5 = fileList.fileList[i].md5;
+		});
 	};
 	self.init(fileList);
 }

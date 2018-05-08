@@ -84,7 +84,7 @@ function refresh(url){
 	}
 	else if(url.pathname.match(/s\/|share\/link/)){
 		page = new SharePage(url);
-		page.execute();
+		page.execute(function(){});
 	}
 }
 
@@ -93,6 +93,13 @@ function generate(fileList){
 		return file.fid;
 	});
 	page.share(fsidList, function(){
+		page.sharePage = new SharePage(page.shorturl);
+		page.sharePage.execute(function(){
+			page.fileList.merge(page.sharePage.fileList);
+			page.sharePage = undefined;
+			updatePopup();
+			page.unshare();
+		});
 	});
 }
 

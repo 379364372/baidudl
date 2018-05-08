@@ -92,7 +92,7 @@ app.controller('control', function($scope, $http){
 	};
 	// verify and get glinks
 	$scope.verify = function(input){
-		$scope.background.page.getGLinks(true, $scope.vcode, input);
+		$scope.background.page.getGLinks(function(){}, true, $scope.vcode, input);
 		$scope.input = '';
 	};
 	// check whether this page is a share page
