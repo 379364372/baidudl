@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo 'baidudl_rpc is ready...'
+dir=$(dirname "$0")
+
+cmd=${dir}/aria2c
+
+"${cmd}" --enable-rpc --console-log-level=error --rpc-allow-origin-all=true --rpc-listen-port=6800
+
+
