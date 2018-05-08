@@ -1,4 +1,4 @@
-# baidudl
+# baidu-dl
 
 It is for extracting high speed download links from pan.baidu.com.
 
