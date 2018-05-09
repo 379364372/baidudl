@@ -99,14 +99,16 @@ function SharePage(url)
 					return;
 				}
 				self.fileList.updateGLinks(res.list);
+				if(self != page)page.fileList.updateGLinks(res.list);
 				if(verify)self.vcode = false;
 				updatePopup();
 
 				// TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
 				// Or maybe there should be an option to toggle the modes.
 				self.fileList.fileList.forEach(function(e){
-					if(e.glink)new Extractor(e).getHLinks(cb);
+					if(e.glink)new Extractor(e).getHLinks();
 				});
+				cb();
 			}
 		});
 	};
@@ -289,14 +291,6 @@ function FileList(fileList)
 		var fsid = file.fid;
 		var idx = self.fsidList.indexOf(fsid);
 		self.fileList[idx].hlinks = hlinks;
-	};
-	self.merge = function(fileList){
-		fileList.fsidList.forEach(function(e, i){
-			var idx = self.fsidList.indexOf(e);
-			if(fileList.fileList[i].glink)self.fileList[idx].glink = fileList.fileList[i].glink;
-			if(fileList.fileList[i].hlinks)self.fileList[idx].hlinks = fileList.fileList[i].hlinks;
-			if(fileList.fileList[i].md5)self.fileList[idx].md5 = fileList.fileList[i].md5;
-		});
 	};
 	self.init(fileList);
 }

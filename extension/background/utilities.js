@@ -95,9 +95,6 @@ function generate(fileList){
 	page.share(fsidList, function(){
 		page.sharePage = new SharePage(page.shorturl);
 		page.sharePage.execute(function(){
-			page.fileList.merge(page.sharePage.fileList);
-			page.sharePage = undefined;
-			updatePopup();
 			page.unshare();
 		});
 	});
