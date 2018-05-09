@@ -208,7 +208,8 @@ function HomePage(url)
 					return;
 				}
 				console.log("Share success");
-				self.shorturl = new URL(res.shorturl);
+				if(fsidList.length > 1)self.shorturl = new URL(res.shorturl+'#list/path=%2F');
+				else self.shorturl = new URL(res.shorturl);
 				self.shareid = res.shareid;
 				cb();
 			}
