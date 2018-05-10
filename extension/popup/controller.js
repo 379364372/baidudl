@@ -71,7 +71,9 @@ app.controller('control', function($scope, $http){
 
 	// check all checker boxes
 	$scope.checkAll = function(){
-		for(i=0; i<$scope.fileList.length; i+=1)$scope.fileList[i].check = true;
+		for(i=0; i<$scope.fileList.length; i+=1){
+			if(!$scope.fileList[i].isdir)$scope.fileList[i].check = true;
+		}
 	};
 	$scope.uncheckAll = function(){
 		for(i=0; i<$scope.fileList.length; i+=1)$scope.fileList[i].check = false;

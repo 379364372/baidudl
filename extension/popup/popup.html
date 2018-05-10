@@ -26,7 +26,7 @@
 					<td><button ng-hide="pageCheck()" ng-click="generate()">Generate</td>
 				</tr>
 				<tr ng-repeat="x in fileList">
-					<td><input type="checkbox" ng-hide="pageCheck()" ng-model="x.check"></td>
+					<td><input type="checkbox" ng-hide="pageCheck()||x.isdir" ng-model="x.check"></td>
 					<td><input style="width: 300px" type="text" value={{x.name}} ng-disabled="true"></td>
 					<td ng-switch={{x.isdir}}>
 						<input style="width: 50px" type="text" value={{x.glink}} ng-disabled="true" ng-switch-when=0>
