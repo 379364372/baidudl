@@ -6,8 +6,11 @@
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
 		<link href="../icon/icon16.png" rel="shortcut icon" type="image/ico" />
 		<style type="text/css">
-		body,html {
-			height: 100%;
+		body {
+			width: 700px;
+			height: 400px;
+			margin: 30px;
+			overflow: scroll;
 		}
 		#logo{
 			margin-left: 100px;
@@ -66,7 +69,6 @@
 							<span>://</span>
 							<input type="text" class="input-xlarge rpc-host" ng-model="x.host" placeholder="RPC Host">
 							<input type="text" class="input-small rpc-port" ng-model="x.port" placeholder="Port">
-							<br>
 							<span> token:</span>
 							<input type="text" class="input-medium rpc-token" ng-model="x.token">
 							<span>(Leave it blank if no token is required)</span>

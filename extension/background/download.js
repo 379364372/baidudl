@@ -29,8 +29,8 @@ function DownloadManager(file)
 		options['summary-interal'] = '0';
 		options.out = self.file.name;
 		params = [];
-		if (config.token && config.token.length > 0) {
-			params.push('token:'+config.token);
+		if (config.rpcList[config.rpcIdx].token && config.rpcList[config.rpcIdx].token.length > 0) {
+			params.push('token:'+config.rpcList[config.rpcIdx].token);
 		}
 		params.push(hlinks);
 		params.push(options);
@@ -61,10 +61,7 @@ function DownloadManager(file)
 	};
 	self.__init__ = function(file){
 		// get rpc interface
-		if(!config.rpc){
-			config.rpc = config.rpcList[0];
-		}
-		var rpc = config.rpc;
+		var rpc = config.rpcList[config.rpcIdx];
 		self.rpcInterface = rpc.protocol+'://'+rpc.host+':'+rpc.port+'/jsonrpc';
 		self.file = file;
 	};

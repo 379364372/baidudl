@@ -54,7 +54,7 @@ chrome.storage.local.get('config', function(result){
 			'qdcache03.baidupcs.com',
 							];
 		config.rpcList.push(tmp);
-		config.rpc = config.rpcList[0];
+		config.rpcIdx = 0;
 	}
 });
 
