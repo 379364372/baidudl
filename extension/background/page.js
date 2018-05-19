@@ -283,7 +283,6 @@ function FileList(fileList)
 		fileList.forEach(function(e){
 			var idx = self.fsidList.indexOf(e.fs_id);
 			self.fileList[idx].glink = e.dlink;
-			self.fileList[idx].md5 = e.md5;
 		});
 	};
 	self.updateHLinks = function(file, hlinks){
@@ -291,6 +290,13 @@ function FileList(fileList)
 		var fsid = file.fid;
 		var idx = self.fsidList.indexOf(fsid);
 		self.fileList[idx].hlinks = hlinks;
+	};
+	self.updateMD5 = function(file, md5){
+		var fsid = file.fid;
+		var idx = self.fsidList.indexOf(fsid);
+		if(self.fileList[idx].md5)return;
+		console.log('updating md5');
+		self.fileList[idx].md5 = md5;
 	};
 	self.init(fileList);
 }

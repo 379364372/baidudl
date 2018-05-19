@@ -119,8 +119,10 @@ function Extractor(file)
 				type: 'HEAD',
 				timeout: 3000,
 				success: function(res, status, request){
-					if(request.getResponseHeader('Content-MD5')){
+					var md5 = request.getResponseHeader('Content-MD5');
+					if(md5){
 						filtered[i] = e;
+						page.fileList.updateMD5(self.file, md5);
 					}
 				}
 			});
