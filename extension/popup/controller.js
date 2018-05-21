@@ -19,6 +19,7 @@ app.controller('control', function($scope, $http){
 				$scope.input = '';
 				$scope.background = background;
 				$scope.textarea = angular.element(document.getElementById('copy'));
+				$scope.rpc = background.config.rpcList[background.config.rpcIdx];
 			});
 		});
 	};
@@ -100,6 +101,11 @@ app.controller('control', function($scope, $http){
 	// check whether this page is a share page
 	$scope.pageCheck = function(){
 		return !$scope.page || $scope.page instanceof $scope.background.SharePage;
+	};
+	// on rpc change
+	$scope.rpcChange = function(){
+		let idx = $scope.background.config.rpcList.indexOf($scope.rpc);
+		$scope.background.config.rpcIdx = idx;
 	};
 
 	// start init

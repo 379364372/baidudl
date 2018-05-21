@@ -11,7 +11,7 @@ chrome.storage.local.get('config', function(result){
 			name	:	'Default',
 			token	:	null,
 			host	:	'127.0.0.1',
-			port	:	6800
+			port	:	"6800"
 		};
 		// TODO: do operation to rank servers
 		config.servers = [

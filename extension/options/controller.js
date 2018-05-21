@@ -8,7 +8,7 @@ app.controller('control', function($scope, $http){
 		var rpc = {};
 		rpc.protocol = 'http';
 		rpc.name = '';
-		rpc.port = 6800;
+		rpc.port = "6800";
 		rpc.host = '';
 		rpc.token = null;
 		$scope.rpcList.push(rpc);
@@ -25,10 +25,10 @@ app.controller('control', function($scope, $http){
 			name	:	'Default',
 			token	:	null,
 			host	:	'127.0.0.1',
-			port	:	6800
+			port	:	"6800"
 		};
 		config.rpcList.push(tmp);
-		config.rpc = tmp;
+		config.rpcIdx = 0;
 		$scope.background.config = config;
 		chrome.storage.local.set({'config': config});
 		window.location.reload();
