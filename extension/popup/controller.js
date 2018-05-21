@@ -25,7 +25,10 @@ app.controller('control', function($scope, $http){
 	};
 
 	// TODO: clearcache should simply use refresh()
-	$scope.clear = function(){};
+	$scope.clear = function(){
+		$scope.background.refresh($scope.background.page.url);
+		$scope.message = 'Refreshing...';
+	};
 	$scope.generate = function(){
 		var filtered = $scope.fileList.filter(function(file){
 			if(file.check)return true;
@@ -76,6 +79,8 @@ app.controller('control', function($scope, $http){
 			if(!$scope.fileList[i].isdir)$scope.fileList[i].check = true;
 		}
 	};
+
+	// uncheck all checker boxes
 	$scope.uncheckAll = function(){
 		for(i=0; i<$scope.fileList.length; i+=1)$scope.fileList[i].check = false;
 	};

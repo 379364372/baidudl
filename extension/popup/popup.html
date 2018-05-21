@@ -29,7 +29,7 @@
 					<td><button ng-click="copyAll('glink')">CopyAll</button></td>
 					<td style="width: 50px">HLinks</td>
 					<td><button ng-click="copyAll('hlink')">CopyAll</button></td>
-					<td><button ng-click="clear()">ClearCache</td>
+					<td><button style="width: 100px" ng-click="clear()">Refresh</td>
 					<td><button ng-hide="pageCheck()" ng-click="generate()">Generate</td>
 				</tr>
 				<tr ng-repeat="x in fileList">
@@ -45,7 +45,7 @@
 						<input style="width: 50px"type='text' value='NA' ng-disabled="true" ng-switch-default>
 					</td>
 					<td><button ng-click="copy($index, 'hlink')">Copy</button></td>
-					<td><button ng-click="download($index)" ng-hide="x.isdir">RPCDownload</td>
+					<td><button style="width: 100px" ng-click="download($index)" ng-hide="x.isdir">RPCDownload</td>
 				</tr>
 			</table>
 			<div><button ng-click="prev()">&lt;</button>{{page.pageno}}<button ng-click="next()">&gt;</button></div>
