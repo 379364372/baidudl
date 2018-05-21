@@ -23,12 +23,12 @@ app.controller('control', function($scope, $http){
 			});
 		});
 	};
-
-	// TODO: clearcache should simply use refresh()
+	// refresh page
 	$scope.clear = function(){
 		$scope.background.refresh($scope.background.page.url);
 		$scope.message = 'Refreshing...';
 	};
+	// generate hlinks for checked items
 	$scope.generate = function(){
 		var filtered = $scope.fileList.filter(function(file){
 			if(file.check)return true;
@@ -72,19 +72,16 @@ app.controller('control', function($scope, $http){
 		else $scope.message = "Copy failure";
 		$scope.textarea.val('');
 	};
-
 	// check all checker boxes
 	$scope.checkAll = function(){
 		for(i=0; i<$scope.fileList.length; i+=1){
 			if(!$scope.fileList[i].isdir)$scope.fileList[i].check = true;
 		}
 	};
-
 	// uncheck all checker boxes
 	$scope.uncheckAll = function(){
 		for(i=0; i<$scope.fileList.length; i+=1)$scope.fileList[i].check = false;
 	};
-
 	// download a file through rpc
 	$scope.download = function(idx){
 		// check glink
@@ -113,7 +110,16 @@ app.controller('control', function($scope, $http){
 		$scope.background.config.rpcIdx = idx;
 	};
 
+	$scope.prev = function(){
+		$scope.background.page.prev();
+	};
+
+	$scope.next = function(){
+		$scope.background.page.next();
+	};
+
 	// start init
 	$scope.init(chrome.extension.getBackgroundPage());
+
 });
 

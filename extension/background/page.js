@@ -1,10 +1,28 @@
 /*
 Models
 */
-
+function BasePage()
+{
+	var self = this;
+	self.prev = function(){
+		console.log("prev");
+		if(self.pageno > 1){
+			self.pageno -= 1;
+			self.execute(function(){});
+		}
+	};
+	self.next = function(){
+		console.log("next");
+		if(self.fileList.fileList.length == 100){
+			self.pageno += 1;
+			self.execute(function(){});
+		}
+	};
+}
 function SharePage(url)
 {
 	var self = this;
+	BasePage.call(self);
 	// init
 	self.init = function(url){
 		console.log('initializing share page...');
@@ -141,6 +159,7 @@ function SharePage(url)
 function HomePage(url)
 {
 	var self = this;
+	BasePage.call(self);
 
 	// init
 	self.init = function(url){
