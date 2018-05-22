@@ -126,7 +126,7 @@ function SharePage(url)
 				self.fileList.fileList.forEach(function(e){
 					if(e.glink)new Extractor(e).getHLinks();
 				});
-				cb();
+				if(cb)cb();
 			}
 		});
 	};

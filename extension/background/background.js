@@ -15,6 +15,8 @@ chrome.storage.local.get('config', function(result){
 		};
 		// TODO: do operation to rank servers
 		config.servers = [
+			'd11.baidupcs.com',
+
 			'd1.baidupcs.com',
 			'd2.baidupcs.com',
 			'd4.baidupcs.com',
@@ -23,7 +25,6 @@ chrome.storage.local.get('config', function(result){
 			'd8.baidupcs.com',
 			'd9.baidupcs.com',
 			'd10.baidupcs.com',
-			'd11.baidupcs.com',
 			'd12.baidupcs.com',
 			'd13.baidupcs.com',
 			'd14.baidupcs.com',

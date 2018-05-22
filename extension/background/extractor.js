@@ -74,7 +74,7 @@ function Extractor(file)
 						parsed_hlink.protocol = 'http';
 						return parsed_hlink.href;
 					});
-					self.hlinks = self.hlinks.concat(hlinks);
+					self.hlinks = hlinks.concat(self.hlinks);
 					return cb(self.hlinks);
 				});
 			},
@@ -98,7 +98,7 @@ function Extractor(file)
 					parsed_hlink.protocol = 'http';
 					return parsed_hlink.href;
 				});
-				self.hlinks = self.hlinks.concat(hlinks);
+				self.hlinks = hlinks.concat(self.hlinks);
 				cb(self.hlinks);
 			},
 			error: function(res0, res1, res2){
@@ -112,6 +112,57 @@ function Extractor(file)
 
 		// rule out useless hlinks by header testing to exploit a race condition bug(or feature?)
 		console.log('filtering hlinks');
+		//self.__fast_filterHLinks__(hlinks, cb);
+		self.__all_filterHLinks__(hlinks, cb);
+	};
+
+	self.__fast_filterHLinks__ = function(hlinks, cb){
+		console.log('look for the first successful hlink');
+
+		// init filtering
+		var filtered = [];
+		var promises = hlinks.map(function(e, i){
+			var func = function(){
+				var promise = $.ajax({
+					url: e,
+					type: 'HEAD',
+					timeout: 3000,
+					success: function(res, status, request){
+						var md5 = request.getResponseHeader('Content-MD5');
+						if(md5){
+							filtered[i] = e;
+							page.fileList.updateMD5(self.file, md5);
+						}
+					}
+				});
+				return promise;
+			};
+			return func;
+		});
+
+		// find the first successful hlink
+		var result = Q();
+		var flag = 0;
+		promises.forEach(function(func){
+			result = result.then(func).fail(function(){}).then(function(){
+				if(filtered.length && !flag){
+					var hlinks = filtered.filter(function(e){
+						if(e)return true;
+					});
+					cb(hlinks);
+					flag = 1;
+				}
+				if(filtered.length){
+					throw new Error();
+				}
+			});
+		});
+	};
+
+	self.__all_filterHLinks__ = function(hlinks, cb){
+		console.log('filter hlinks for rpc download');
+
+		// init filtering
 		var filtered = [];
 		var promises = hlinks.map(function(e, i){
 			var promise = $.ajax({
@@ -128,6 +179,8 @@ function Extractor(file)
 			});
 			return promise;
 		});
+
+		// start filtering
 		Q.allSettled(promises).then(function(res){
 			filtered = filtered.filter(function(e){
 				if(e)return true;
