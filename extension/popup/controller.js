@@ -20,6 +20,7 @@ app.controller('control', function($scope, $http){
 				$scope.background = background;
 				$scope.textarea = angular.element(document.getElementById('copy'));
 				$scope.rpc = background.config.rpcList[background.config.rpcIdx];
+				$scope.optionsPage = "chrome://extensions/?options="+chrome.runtime.id;
 			});
 		});
 	};
@@ -108,6 +109,9 @@ app.controller('control', function($scope, $http){
 	$scope.rpcChange = function(){
 		let idx = $scope.background.config.rpcList.indexOf($scope.rpc);
 		$scope.background.config.rpcIdx = idx;
+	};
+	$scope.openOptionPage = function(){
+		chrome.runtime.openOptionsPage();
 	};
 
 	$scope.prev = function(){

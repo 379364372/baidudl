@@ -17,10 +17,15 @@
 
 	<body>
 		<div id='app' ng-app="popup" ng-csp ng-controller='control'>
-			<div style="margin: 10px 20px;text-align:right">
-				<strong>RPC Address</strong>
-				<select ng-model="rpc" ng-options="rpc.protocol+'://'+rpc.host+':'+rpc.port+'/jsonrpc' for rpc in background.config.rpcList" ng-change="rpcChange()"></select>
-			</div>
+			<div>
+				<div style="margin: 10px 10px;text-align:right;float:left">
+					<button ng-click="openOptionPage()">Options</button>
+				</div>
+				<div style="margin: 10px 20px;text-align:right;float:right">
+					<strong>RPC Address</strong>
+					<select ng-model="rpc" ng-options="rpc.protocol+'://'+rpc.host+':'+rpc.port+'/jsonrpc' for rpc in background.config.rpcList" ng-change="rpcChange()"></select>
+				</div>
+			<div>
 			<table>
 				<tr>
 					<td><button ng-hide="pageCheck()" ng-click="checkAll()">CheckAll</button></td>
