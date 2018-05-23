@@ -26,6 +26,7 @@ app.controller('control', function($scope, $http){
 	};
 	// refresh page
 	$scope.clear = function(){
+		$scope.fileList = [];
 		$scope.background.refresh($scope.background.page.url);
 		$scope.message = 'Refreshing...';
 	};
