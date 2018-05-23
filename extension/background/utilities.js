@@ -70,7 +70,7 @@ function list_search(yunData, url, cb){
 
 function resetConfig(){
 	config ={};
-	config.maxThreads	=	164;
+	config.maxThreads	=	"164";
 	config.rpcList		=	[];
 	var tmp = {
 		protocol:	'http',

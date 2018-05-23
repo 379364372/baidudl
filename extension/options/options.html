@@ -74,6 +74,9 @@
 						<span class="option-name">RPC Mode:</span>
 						<select ng-model="mode" ng-options="option for option in ['on', 'off']" ng-change="modeChange()"></select>
 					</div>
+					<div>
+						<input type="text" ng-model="maxThreads" ng-change="threadsChange()">
+					</div>
 				</fieldset>
 			</div>
 			<div class="form-horizontal">

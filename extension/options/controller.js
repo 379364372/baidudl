@@ -4,6 +4,7 @@ app.controller('control', function($scope, $http){
 		$scope.background = background;
 		$scope.rpcList = background.config.rpcList;
 		$scope.mode = $scope.background.config.mode == 'rpc'? 'on':'off';
+		$scope.maxThreads = $scope.background.config.maxThreads;
 	};
 	$scope.add = function(){
 		var rpc = {};
@@ -36,6 +37,10 @@ app.controller('control', function($scope, $http){
 	};
 	$scope.modeChange = function(){
 		$scope.background.config.mode = $scope.mode == 'on'? 'rpc':'fast';
+	};
+	$scope.threadsChange = function(){
+		if(!$scope.maxThreads)return;
+		$scope.background.config.maxThreads = $scope.maxThreads;
 	};
 	$scope.resetAll = function(){
 		$scope.background.resetConfig();
