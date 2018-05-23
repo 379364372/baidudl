@@ -37,6 +37,10 @@ app.controller('control', function($scope, $http){
 	$scope.modeChange = function(){
 		$scope.background.config.mode = $scope.mode == 'on'? 'rpc':'fast';
 	};
+	$scope.resetAll = function(){
+		$scope.background.resetConfig();
+		window.location.reload();
+	};
 
 	$scope.init(chrome.extension.getBackgroundPage());
 });
