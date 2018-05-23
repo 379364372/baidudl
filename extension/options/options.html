@@ -33,6 +33,11 @@
 		legend{
 			margin-bottom: 0px;
 		}
+		.options{
+			display: inline-block;
+			width: 60px;
+			height: 20px;
+		}
 		.input-small{
 			max-width: 40px;
 		}
@@ -51,13 +56,25 @@
 		hr{
 			margin-bottom: 30px;
 		}
+		.option-name{
+			padding-right: 10px;
+		}
 		</style>
 		<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>
 	<body>
-		<div id='app'ng-app="options" ng-controller="control" class="container">
+		<div id='app' ng-app="options" ng-controller="control" class="container">
+			<div class="form-horizontal">
+				<fieldset>
+					<legend>Extension settings</legend>
+					<div>
+						<span class="option-name">RPC Mode:</span>
+						<select ng-model="mode" ng-options="option for option in ['on', 'off']" ng-change="modeChange()"></select>
+					</div>
+				</fieldset>
+			</div>
 			<div class="form-horizontal">
 				<fieldset id="rpc-list">
 					<legend>RPC settings</legend>

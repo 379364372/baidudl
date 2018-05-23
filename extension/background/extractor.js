@@ -112,8 +112,8 @@ function Extractor(file)
 
 		// rule out useless hlinks by header testing to exploit a race condition bug(or feature?)
 		console.log('filtering hlinks');
-		//self.__fast_filterHLinks__(hlinks, cb);
-		self.__all_filterHLinks__(hlinks, cb);
+		if(config.mode == 'rpc')self.__all_filterHLinks__(hlinks, cb);
+		else self.__fast_filterHLinks__(hlinks, cb);
 	};
 
 	self.__fast_filterHLinks__ = function(hlinks, cb){
