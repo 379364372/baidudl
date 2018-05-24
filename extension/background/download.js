@@ -19,13 +19,16 @@ function DownloadManager(file)
 		// prepare json request
 		var hlink = new URL(hlinks[0]);
 		options = {};
-		options.split = config.maxThreads+'';
+		if(config.maxThreads < 16*hlinks.length)options.split = config.maxThreads+'';
+		else options.split = 16*hlinks.length+'';
 		options.checksum = 'md5='+self.file.md5;
 		options['check-integrity'] = 'true';
 		options['max-connection-per-server'] = '16';
 		options['user-agent'] = navigator.userAgent;
 		options['check-certificate'] = 'false';
 		options['min-split-size'] = '1m';
+		options['lowest-speed-limit'] = '20k';
+		options['async-dns'] = 'false';
 		options['summary-interal'] = '0';
 		options.out = self.file.name;
 		params = [];

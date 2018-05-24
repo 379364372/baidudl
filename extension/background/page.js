@@ -272,13 +272,14 @@ function HomePage(url)
 //	  };
 //}
 
-function File(path, fid, isdir, md5=undefined, glink=undefined, hlinks=undefined)
+function File(path, fid, isdir, md5=undefined, glink=undefined, hlinks=undefined, size=undefined)
 {
 	var self = this;
 	self.path = path;
 	self.fid = fid;
 	self.isdir = isdir;
 	self.md5 = md5;
+	self.size = size;
 	self.glink = glink;
 	self.hlinks = hlinks;
 	var tmp = path.split('/');
@@ -302,6 +303,7 @@ function FileList(fileList)
 		fileList.forEach(function(e){
 			var idx = self.fsidList.indexOf(e.fs_id);
 			self.fileList[idx].glink = e.dlink;
+			self.fileList[idx].size = e.size;
 		});
 	};
 	self.updateHLinks = function(file, hlinks){
