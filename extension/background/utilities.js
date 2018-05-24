@@ -37,37 +37,6 @@ function b64(t) {
 	return e;
 }
 
-// list search result
-function list_search(yunData, url, cb){
-	// get keyword
-	var key = getURLParameter(url, 'key');
-
-	// get sign parameter
-	var u;
-	eval("u = " + yunData.sign2);
-	if(!yunData.sign5)sign = b64(u(yunData.sign3, yunData.sign1));
-	else sign = b64(u(yunData.sign5, yunData.sign1));
-	sign = encodeURIComponent(sign);
-
-
-	// list search result
-	$.ajax({
-		type: 'GET',
-		url: 'https://pan.baidu.com/api/search?recursion=1&order=time&desc=1&showempty=0&page=1&num=100&key='+key,
-		dataType: 'json',
-		success: function(res){
-			// in case of failure
-			if(res.errno != 0){
-				console.log(res);
-				database.status = 'error';
-				database.message = 'Warning: can\'t get search result';
-				return;
-			}
-			cb(res.list);
-		}
-	});
-}
-
 function resetConfig(){
 	config ={};
 	config.maxThreads	=	"164";
@@ -136,7 +105,7 @@ function refresh(url){
 			page = new HomePage(url);
 			page.execute();
 		}
-		else if(url.hash.substr(0, 7) == '#search' && url.hash.indexOf('vmode') > 0){
+		else if(url.hash.substr(0, 8) == '#/search' && url.hash.indexOf('vmode') > 0){
 			page = new SearchPage(url);
 			page.execute();
 		}

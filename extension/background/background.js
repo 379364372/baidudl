@@ -19,7 +19,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	if(url.pathname == '/disk/home'){
 		chrome.pageAction.hide(tabId);
 		if(url.hash.substr(0, 5) == '#list' | url.hash.substr(0, 5) == '#/all')chrome.pageAction.show(tabId);
-		else if(url.hash.substr(0, 7) == '#search')chrome.pageAction.show(tabId);
+		else if(url.hash.substr(0, 8) == '#/search')chrome.pageAction.show(tabId);
 	}
 	else if(url.pathname.match(/s\/|share\/link/)){
 		chrome.pageAction.show(tabId);

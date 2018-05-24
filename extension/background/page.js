@@ -263,14 +263,38 @@ function HomePage(url)
 	self.init(url);
 }
 
-//function SearchPage(url)
-//{
-//	  var self = this;
-//	  self.url = url;
-//	  self.execute = function(){
-//		  console.log('search page');
-//	  };
-//}
+function SearchPage(url)
+{
+	var self = this;
+	HomePage.call(self);
+
+	// overwrite list dir
+	self.listDir = function(cb){
+		var key = getURLParameter(url, 'key');
+		$.ajax({
+			type: 'GET',
+			url: 'https://pan.baidu.com/api/search?recursion=1&order=time&desc=1&showempty=0&page='+self.pageno+'&num=100&key='+key,
+			dataType: 'json',
+			success: function(res){
+				// if error is encountered
+				if(res.errno != 0 ){
+					new Error(res.errno).handle();
+					return;
+				}
+				console.log("List dir succeeds");
+				// good, we make it
+				if(res.list.length == 0){
+					return;
+				}
+				self.fileList = new FileList(res.list);
+				updatePopup();
+				cb();
+			}
+		});
+	};
+
+	self.init(url);
+}
 
 function File(path, fid, isdir, md5=undefined, glink=undefined, hlinks=undefined, size=undefined)
 {
