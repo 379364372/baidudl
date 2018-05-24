@@ -98,6 +98,7 @@ function resetConfig(){
 		'd13.baidupcs.com',
 		'd14.baidupcs.com',
 		'd16.baidupcs.com',
+		'nb.cache.baidupcs.com',
 		'nbcache00.baidupcs.com',
 		'nbcache02.baidupcs.com',
 		'nbcache03.baidupcs.com',

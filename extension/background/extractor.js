@@ -35,14 +35,16 @@ function Extractor(file)
 		});
 		self.hlinks = hlinks;
 
-		if(!page.bduss){
-			self.__anonymous_getHLinks__(cb);
-			return;
-		}
-		else{
-			self.__login_getHLinks__(cb);
-			return;
-		}
+		// only anonymously get hlinks
+		self.__anonymous_getHLinks__(cb);
+		//if(!page.bduss){
+		//	self.__anonymous_getHLinks__(cb);
+		//	return;
+		//}
+		//else{
+		//	self.__login_getHLinks__(cb);
+		//	return;
+		//}
 	};
 	self.__login_getHLinks__ = function(cb){
 		console.log('Try to get hlinks when logged in');
@@ -219,7 +221,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 // catch error when doing link filtering
 chrome.webRequest.onHeadersReceived.addListener(
 	function(details){
-		var bad_codes = [400, 406, 503];
+		var bad_codes = [400, 403, 406, 503];
 		if(bad_codes.indexOf(details.statusCode) >= 0){
 			// drop packet if status code is bad
 			return {redirectUrl: 'javascript:'};
@@ -231,8 +233,9 @@ chrome.webRequest.onHeadersReceived.addListener(
 			})[0];
 			var url = new URL(header.value);
 
-			// drop packet if we know we are going to 401
+			// drop packet if we know we are going to 401 or 403
 			if(url.pathname == '/401.html')return {redirectUrl: 'javascript:'};
+			if(url.pathname == '/403.html')return {redirectUrl: 'javascript:'};
 
 			// otherwise, we let the packet pass through
 			return {'responseHeaders': details.responseHeaders};
@@ -243,4 +246,21 @@ chrome.webRequest.onHeadersReceived.addListener(
 	},
 	{urls: ["*://*.baidupcs.com/file/*", "*://*/*.baidupcs.com/file/*"]},
 	['blocking', 'responseHeaders']
+);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+	function(details){
+		var headers = details.requestHeaders;
+		var index = -1;
+		for(var i=0; i<headers.length; i++){
+			if(headers[i].name == 'User-Agent'){
+				index = i;
+				headers[index].value = 'netdisk;2.2.0;macbaiduyunguanjia';
+				break;
+			}
+		}
+		return {'requestHeaders': headers};
+	},
+	{urls: ['*://d.pcs.baidu.com/rest/2.0/pcs/file?*']},
+	['blocking', 'requestHeaders']
 );
