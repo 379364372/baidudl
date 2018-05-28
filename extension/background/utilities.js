@@ -39,7 +39,7 @@ function b64(t) {
 
 function resetConfig(){
 	config ={};
-	config.maxThreads	=	"164";
+	config.maxThreads	=	"100";
 	config.rpcList		=	[];
 	var tmp = {
 		protocol:	'http',
@@ -51,7 +51,6 @@ function resetConfig(){
 	config.rpcList.push(tmp);
 	config.rpcIdx = 0;
 	config.mode = 'fast';
-	// TODO: do operation to rank servers
 	config.servers = [
 		'd11.baidupcs.com',
 

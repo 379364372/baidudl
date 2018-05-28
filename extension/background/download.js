@@ -1,8 +1,3 @@
-// fast call to download a file
-function download(file){
-	new DownloadManager(file).download();
-}
-
 function DownloadManager(file)
 {
 	var self = this;
@@ -50,6 +45,7 @@ function DownloadManager(file)
 		$.ajax({
 			url: self.rpcInterface,
 			type: 'POST',
+			timeout: 2000,
 			data: JSON.stringify(jsonreq),
 			dataType: 'json',
 			success: function(res){

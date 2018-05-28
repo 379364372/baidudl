@@ -91,7 +91,7 @@ app.controller('control', function($scope, $http){
 			$scope.message = 'Warning: HLinks should be generated before download!';
 			return;
 		}
-		$scope.background.download($scope.fileList[idx]);
+		$scope.background.page.downloadFile($scope.fileList[idx]);
 	};
 	// refresh vcode
 	$scope.refresh = function(){

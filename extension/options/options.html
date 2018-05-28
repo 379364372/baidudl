@@ -58,6 +58,8 @@
 		}
 		.option-name{
 			padding-right: 10px;
+			display: inline-block;
+			width: 150px;
 		}
 		</style>
 		<!--[if lt IE 9]>
@@ -75,6 +77,7 @@
 						<select ng-model="mode" ng-options="option for option in ['on', 'off']" ng-change="modeChange()"></select>
 					</div>
 					<div>
+						<span class="option-name">max threads number:</span>
 						<input type="text" ng-model="maxThreads" ng-change="threadsChange()">
 					</div>
 				</fieldset>

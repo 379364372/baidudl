@@ -18,6 +18,10 @@ function BasePage()
 			self.execute(function(){});
 		}
 	};
+	self.downloadFile = function(file){
+		console.log('downloading...');
+		new DownloadManager(file).download();
+	};
 }
 function SharePage(url)
 {
