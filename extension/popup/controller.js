@@ -86,12 +86,17 @@ app.controller('control', function($scope, $http){
 	};
 	// download a file through rpc
 	$scope.download = function(idx){
-		// check glink
-		if(!$scope.fileList[idx].hlinks || !$scope.fileList[idx].hlinks.length){
-			$scope.message = 'Warning: HLinks should be generated before download!';
-			return;
+		var file = $scope.fileList[idx];
+		if(!file.isdir){
+			if(!file.hlinks || !file.hlinks.length){
+				$scope.message = 'Warning: HLinks should be generated before download!';
+				return;
+			}
+			$scope.background.page.downloadFile(file);
 		}
-		$scope.background.page.downloadFile($scope.fileList[idx]);
+		else{
+			$scope.background.page.downloadFolder(file);
+		}
 	};
 	// refresh vcode
 	$scope.refresh = function(){

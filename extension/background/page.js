@@ -40,7 +40,19 @@ function SharePage(url)
 			self.bduss = cookie? cookie.value:'';
 		});
 	};
+	// recursively download folder
+	self.downloadFolder = function(file){
+		console.log('downloading folder '+file.path);
 
+		// create new share page
+		var url = new URL(self.url.href);
+		setURLParameter(url, 'path', file.path);
+		var page = new SharePage(url);
+		console.log(page.url);
+		page.execute(function(){
+			console.log(page);
+		});
+	};
 	// get verification parameter extra
 	self.getExtra = function(cb){
 		console.log('getting parameter extra...');
@@ -128,7 +140,7 @@ function SharePage(url)
 				// TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
 				// Or maybe there should be an option to toggle the modes.
 				self.fileList.fileList.forEach(function(e){
-					if(e.glink)new Extractor(e).getHLinks();
+					if(e.glink)new Extractor(page, e).getHLinks();
 				});
 				if(cb)cb();
 			}

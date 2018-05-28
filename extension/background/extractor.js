@@ -1,11 +1,12 @@
-function Extractor(file)
+function Extractor(page, file)
 {
 	var self = this;
+	self.page = page;
 
 	self.getHLinks = function(){
 		self.__getHLinks__(function(hlinks){
 			self.__filterHLinks__(hlinks, function(filtered){
-				page.fileList.updateHLinks(self.file, filtered);
+				self.page.fileList.updateHLinks(self.file, filtered);
 				updatePopup();
 			});
 		});
@@ -37,7 +38,7 @@ function Extractor(file)
 
 		// only anonymously get hlinks
 		self.__anonymous_getHLinks__(cb);
-		//if(!page.bduss){
+		//if(!self.page.bduss){
 		//	self.__anonymous_getHLinks__(cb);
 		//	return;
 		//}
@@ -133,7 +134,7 @@ function Extractor(file)
 						var md5 = request.getResponseHeader('Content-MD5');
 						if(md5){
 							filtered[i] = e;
-							page.fileList.updateMD5(self.file, md5);
+							self.page.fileList.updateMD5(self.file, md5);
 						}
 					}
 				});
@@ -175,7 +176,7 @@ function Extractor(file)
 					var md5 = request.getResponseHeader('Content-MD5');
 					if(md5){
 						filtered[i] = e;
-						page.fileList.updateMD5(self.file, md5);
+						self.page.fileList.updateMD5(self.file, md5);
 					}
 				}
 			});

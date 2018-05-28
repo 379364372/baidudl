@@ -10,6 +10,12 @@ function getURLParameter(url, name) {
 	return null;
 }
 
+function setURLParameter(url, name, val){
+	var old_val = getURLParameter(url, name);
+	url.hash = url.hash.replace(old_val, encodeURIComponent(val));
+	return url;
+}
+
 // variant base64 encoding function, copy from pan.baidu.com
 // I don't understand it. But we don't have to.
 function b64(t) {
