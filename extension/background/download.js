@@ -22,7 +22,7 @@ function DownloadManager(file)
 		options['user-agent'] = navigator.userAgent;
 		options['check-certificate'] = 'false';
 		options['min-split-size'] = '1m';
-		options['lowest-speed-limit'] = '20k';
+		options['lowest-speed-limit'] = '15k';
 		options['async-dns'] = 'false';
 		options['summary-interal'] = '0';
 		options.out = self.file.name;
@@ -49,7 +49,7 @@ function DownloadManager(file)
 			data: JSON.stringify(jsonreq),
 			dataType: 'json',
 			success: function(res){
-				page.message = 'Added to '+self.rpcInterface+'. The speed is '+hlink.searchParams.get('csl');
+				page.message = '"'+self.file.name+'"'+' is added to '+self.rpcInterface+'. The speed is '+hlink.searchParams.get('csl');
 				updatePopup();
 			},
 			error: function(){
