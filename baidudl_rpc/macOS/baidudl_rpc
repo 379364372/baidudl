@@ -5,6 +5,6 @@ dir=$(dirname "$0")
 
 cmd=${dir}/aria2c
 
-"${cmd}" --enable-rpc --console-log-level=error --rpc-allow-origin-all=true --rpc-listen-port=6800
+"${cmd}" --enable-rpc --console-log-level=error --rpc-allow-origin-all=true --rpc-listen-port=6800 -d ${dir} -j 1
 
 
