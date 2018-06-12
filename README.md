@@ -37,33 +37,33 @@ Select the directory containing baidudl
 ![a screenshot](https://raw.githubusercontent.com/Kyle-Kyle/baidudl/master/extension/screenshot.png)
 
 
-### Method1: Directly download
+### Method1: Directly download(not recommended)
 
 #### Step 1:
 
-Login into [Baidu netdisk](https://pan.baidu.com)
+Navigate your browser to download page
 
 #### Step 2:
 
-Navigate your browser to download page
+Click on the icon of baidudl and wait for at most 5 seconds to get real download links
 
 #### Step 3:
 
-Click on the icon of baidudl and wait for it to give you real download links
+Copy the real download links of what you want to download to a multithread downloader, eg: IDM, FDM(**banned by baidu**), Thunder(if you are vip, you know it).
+
+### Method2: RPC download(recommended)
+
+#### Step 1:
+
+Enable RPC Mode in options
+
+#### Step 2-3:
+
+Same to Diretly download Step 1-2
 
 #### Step 4:
 
-Copy the real download links of what you want to download to a multithread downloader, eg: IDM, FDM(**highly recommended**), Thunder(if you are vip, you know it).
-
-### Method2: RPC download
-
-#### Step 1-3:
-
-Same to Diretly download
-
-#### Step 4:
-
-Open up `baidudl-rpc`, or run `aria2c-rpc`
+Open up `baidudl_rpc`, or run cmd `aria2c --enable-rpc -j 1`
 
 #### Step 5:
 
