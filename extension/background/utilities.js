@@ -50,7 +50,7 @@ function resetConfig(){
 	};
 	config.rpcList.push(tmp);
 	config.rpcIdx = 0;
-	config.mode = 'fast';
+	config.mode = 'rpc';
 	config.servers = [
 		'd11.baidupcs.com',
 
