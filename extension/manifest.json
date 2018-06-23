@@ -4,7 +4,7 @@
 	"name": "baidu-dl",
 	"short_name": "baidu-dl",
 	"description": "Extract high speed download links from pan.baidu.com. Github: https://github.com/Kyle-Kyle/baidudl",
-	"version": "2.0.0",
+	"version": "2.0.1",
 
 	"icons": {
 		"16": "icon/icon16.png",

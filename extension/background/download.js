@@ -22,7 +22,9 @@ function DownloadManager(file)
 		options['user-agent'] = navigator.userAgent;
 		options['check-certificate'] = 'false';
 		options['min-split-size'] = '1m';
-		options['lowest-speed-limit'] = '15k';
+		if(self.file.size <= 1024*1024*10){
+			options['lowest-speed-limit'] = '15k';
+		}
 		options['async-dns'] = 'false';
 		options['summary-interal'] = '0';
 		options.out = self.file.name;
