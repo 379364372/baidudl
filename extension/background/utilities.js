@@ -127,6 +127,7 @@ function generate(fileList){
 	});
 	page.share(fsidList, function(){
 		page.sharePage = new SharePage(page.shorturl);
+		page.sharePage.parentPage = page;
 		page.sharePage.execute(function(){
 			page.unshare();
 		});

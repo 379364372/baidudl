@@ -4,6 +4,12 @@ Models
 function BasePage()
 {
 	var self = this;
+	self.init = function(){
+		self.parentPage = undefined;
+		self.pageno = 1;
+		self.fileList = [];
+		self.yunData = [];
+	};
 	self.prev = function(){
 		console.log("prev");
 		if(self.pageno > 1){
@@ -22,6 +28,7 @@ function BasePage()
 		console.log('downloading...');
 		new DownloadManager(file).download();
 	};
+	self.init();
 }
 function SharePage(url)
 {
@@ -31,11 +38,9 @@ function SharePage(url)
 	self.init = function(url){
 		console.log('initializing share page...');
 		self.url = url;
-		self.pageno = 1;
 		self.vcode = false;
 		self.extra = '';
-		self.yunData = [];
-		self.fileList = [];
+		self.childPages = [];
 		chrome.cookies.get({url: 'https://pan.baidu.com/', name: 'BDUSS'}, function(cookie){
 			self.bduss = cookie? cookie.value:'';
 		});
@@ -45,9 +50,24 @@ function SharePage(url)
 		console.log('downloading folder '+file.path);
 
 		// create new share page
+		var page;
 		var url = new URL(self.url.href);
 		setURLParameter(url, 'path', file.path);
-		var page = new SharePage(url);
+
+		let found = false;
+		for(let i=0; i<self.childPages.length; i++){
+			if(self.childPages[i].url.href == url.href){
+				page = self.childPages[i];
+				found = true;
+				break;
+			}
+		}
+		if(!found){
+			page = new SharePage(url);
+			page.parentPage = self;
+			self.childPages.push(page);
+		}
+
 		console.log(page.url);
 		page.execute(function(){
 			console.log(page);
@@ -133,14 +153,19 @@ function SharePage(url)
 					return;
 				}
 				self.fileList.updateGLinks(res.list);
-				if(self != page)page.fileList.updateGLinks(res.list);
 				if(verify)self.vcode = false;
+
+				// update to top level page only if page is HomePage
+				if(self.parentPage instanceof HomePage && self != page)page.fileList.updateGLinks(res.list);
 				updatePopup();
 
 				// TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
 				// Or maybe there should be an option to toggle the modes.
 				self.fileList.fileList.forEach(function(e){
-					if(e.glink)new Extractor(page, e).getHLinks();
+					if(e.glink){
+						if(self.parentPage instanceof HomePage)new Extractor(self.parentPage, e).getHLinks();
+						else new Extractor(self, e).getHLinks();
+					}
 				});
 				if(cb)cb();
 			}
@@ -183,9 +208,6 @@ function HomePage(url)
 		self.shorturl = '';
 		self.shareid = '';
 		self.url = url;
-		self.pageno = 1;
-		self.yunData = [];
-		self.fileList = [];
 		self.sharePage = undefined;
 	};
 
