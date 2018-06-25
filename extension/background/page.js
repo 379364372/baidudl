@@ -68,9 +68,7 @@ function SharePage(url)
 			self.childPages.push(page);
 		}
 
-		console.log(page.url);
 		page.execute(function(){
-			console.log(page);
 		});
 	};
 	// get verification parameter extra
@@ -156,7 +154,10 @@ function SharePage(url)
 				if(verify)self.vcode = false;
 
 				// update to top level page only if page is HomePage
-				if(self.parentPage instanceof HomePage && self != page)page.fileList.updateGLinks(res.list);
+				if(self.parentPage instanceof HomePage)self.parentPage.fileList.updateGLinks(res.list);
+				else{
+					self.fileList.updateGLinks(res.list);
+				}
 				updatePopup();
 
 				// TODO: maybe we can get hlink list for once to reduce overhead. need further testing.
@@ -188,7 +189,9 @@ function SharePage(url)
 					self.getGLinks(cb);
 				}
 				else{
-					self.listDir(self.getGLinks);
+					self.listDir(function(){
+						self.getGLinks(cb);
+					});
 				}
 			});
 		});
