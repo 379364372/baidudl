@@ -68,7 +68,8 @@ function SharePage(url)
 			self.childPages.push(page);
 		}
 
-		page.execute(function(){
+		page.execute(function(file){
+			new DownloadManager(file).download();
 		});
 	};
 	// get verification parameter extra
@@ -127,7 +128,7 @@ function SharePage(url)
 	};
 
 	// get glink
-	self.getGLinks = function(cb, verify=false, vcode=undefined, input=undefined){
+	self.getGLinks = function(blocking_cb=function(){}, cb=function(){}, verify=false, vcode=undefined, input=undefined){
 		console.log('getting glink list...');
 		var url = "http://pan.baidu.com/api/sharedownload?sign="+self.yunData.sign+"&timestamp="+self.yunData.timestamp;
 		var data = "encrypt=0&product=share&uk="+self.yunData.uk+"&primaryid="+self.yunData.shareid;
@@ -164,16 +165,16 @@ function SharePage(url)
 				// Or maybe there should be an option to toggle the modes.
 				self.fileList.fileList.forEach(function(e){
 					if(e.glink){
-						if(self.parentPage instanceof HomePage)new Extractor(self.parentPage, e).getHLinks();
-						else new Extractor(self, e).getHLinks();
+						if(self.parentPage instanceof HomePage)new Extractor(self.parentPage, e).getHLinks(blocking_cb);
+						else new Extractor(self, e).getHLinks(blocking_cb);
 					}
 				});
-				if(cb)cb();
+				cb();
 			}
 		});
 	};
 	// main logic in share page
-	self.execute = function(cb){
+	self.execute = function(blocking_cb){
 		console.log('share page main logic starts');
 		self.getExtra(function(){
 			self.getShareYunData(function(){
@@ -186,11 +187,11 @@ function SharePage(url)
 				if(self.url.hash.indexOf('list') < 0 || getURLParameter(self.url, 'path') == '%2F'){
 					self.fileList = new FileList(fileList);
 					updatePopup();
-					self.getGLinks(cb);
+					self.getGLinks(blocking_cb);
 				}
 				else{
 					self.listDir(function(){
-						self.getGLinks(cb);
+						self.getGLinks(blocking_cb);
 					});
 				}
 			});

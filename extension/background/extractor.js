@@ -3,11 +3,12 @@ function Extractor(page, file)
 	var self = this;
 	self.page = page;
 
-	self.getHLinks = function(){
+	self.getHLinks = function(cb){
 		self.__getHLinks__(function(hlinks){
 			self.__filterHLinks__(hlinks, function(filtered){
 				self.page.fileList.updateHLinks(self.file, filtered);
 				updatePopup();
+				cb(self.file);
 			});
 		});
 	};
