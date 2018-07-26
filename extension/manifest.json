@@ -3,8 +3,8 @@
 
 	"name": "baidu-dl",
 	"short_name": "baidu-dl",
-	"description": "Extract high speed download links from pan.baidu.com. Github: https://github.com/Kyle-Kyle/baidudl",
-	"version": "2.0.1",
+	"description": "Help user extract high speed download links from pan.baidu.com and send them to aria2 rpc server to bypass the download speed limit",
+	"version": "2.0.2",
 
 	"icons": {
 		"16": "icon/icon16.png",
