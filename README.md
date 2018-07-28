@@ -34,7 +34,7 @@ Select the directory containing baidudl
 
 ## How to use baidudl so that your download speed won't be limited
 
-![a screenshot](https://raw.githubusercontent.com/Kyle-Kyle/baidudl/master/extension/screenshot.png)
+![a screenshot](https://raw.githubusercontent.com/Kyle-Kyle/baidudl/master/extension/screenshots/screenshot3.png)
 
 
 ### Method1: Directly download(not recommended)
