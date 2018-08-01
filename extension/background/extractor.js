@@ -91,6 +91,8 @@ function Extractor(file)
 		$.ajax({
 			url: self.file.glink,
 			type: 'HEAD',
+			tryCount: 0,
+			retryLimit: 3,
 			success: function(res, status, request){
 				console.log('Catch glink successfully');
 				var tmp_hlink = request.getResponseHeader('url');
@@ -103,16 +105,25 @@ function Extractor(file)
 				self.hlinks = hlinks.concat(self.hlinks);
 				cb(self.hlinks);
 			},
-			error: function(res0, res1, res2){
-				console.log(res0);
-				console.log(res1);
-				console.log(res2);
+			error: function(xhr, status, error){
+				console.log(xhr);
+				console.log(status);
+				console.log(error);
+				if(xhr.status == 400){
+					this.tryCount += 1;
+					if(this.tryCount <= this.retryLimit){
+						console.log('retry...');
+						console.log('try count is: ' + this.tryCount);
+						$.ajax(this);
+						return;
+					}
+					return;
+				}
 			}
 		});
 	};
 	self.__filterHLinks__ = function(hlinks, cb){
-
-		// rule out useless hlinks by header testing to exploit a race condition bug(or feature?)
+		// rule out useless hlinks by header testing
 		console.log('filtering hlinks');
 		if(config.mode == 'rpc')self.__all_filterHLinks__(hlinks, cb);
 		else self.__fast_filterHLinks__(hlinks, cb);
