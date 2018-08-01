@@ -4,8 +4,8 @@ function Extractor(file)
 
 	self.getHLinks = function(){
 		self.__getHLinks__(function(hlinks){
-			self.__filterHLinks__(hlinks, function(filtered){
-				page.fileList.updateHLinks(self.file, filtered);
+			self.__fast_filterHLinks__(hlinks, function(filtered){
+				page.fileList.updateHLinks(self.file, filtered.concat(hlinks));
 				updatePopup();
 			});
 		});
