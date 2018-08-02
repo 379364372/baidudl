@@ -37,14 +37,6 @@ function Extractor(file)
 
 		// only anonymously get hlinks
 		self.__anonymous_getHLinks__(cb);
-		//if(!page.bduss){
-		//	self.__anonymous_getHLinks__(cb);
-		//	return;
-		//}
-		//else{
-		//	self.__login_getHLinks__(cb);
-		//	return;
-		//}
 	};
 	self.__login_getHLinks__ = function(cb){
 		console.log('Try to get hlinks when logged in');
@@ -141,9 +133,11 @@ function Extractor(file)
 					type: 'HEAD',
 					timeout: 3000,
 					success: function(res, status, request){
+						filtered[i] = e;
+
+						// if md5 exists in response, update md5
 						var md5 = request.getResponseHeader('Content-MD5');
 						if(md5){
-							filtered[i] = e;
 							page.fileList.updateMD5(self.file, md5);
 						}
 					}

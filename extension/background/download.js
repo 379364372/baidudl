@@ -16,8 +16,10 @@ function DownloadManager(file)
 		options = {};
 		if(config.maxThreads < 16*hlinks.length)options.split = config.maxThreads+'';
 		else options.split = 16*hlinks.length+'';
-		options.checksum = 'md5='+self.file.md5;
-		options['check-integrity'] = 'true';
+		if(self.file.md5){
+			options.checksum = 'md5='+self.file.md5;
+			options['check-integrity'] = 'true';
+		}
 		options['max-connection-per-server'] = '16';
 		options['user-agent'] = navigator.userAgent;
 		options['check-certificate'] = 'false';
