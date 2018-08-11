@@ -83,8 +83,9 @@ function Extractor(file)
 		$.ajax({
 			url: self.file.glink,
 			type: 'HEAD',
+			timeout: 3000,
 			tryCount: 0,
-			retryLimit: 3,
+			retryLimit: 5,
 			success: function(res, status, request){
 				console.log('Catch glink successfully');
 				var tmp_hlink = request.getResponseHeader('url');
@@ -101,7 +102,7 @@ function Extractor(file)
 				console.log(xhr);
 				console.log(status);
 				console.log(error);
-				if(xhr.status == 400){
+				if(xhr.status == 400 || xhr.status == 0){
 					this.tryCount += 1;
 					if(this.tryCount <= this.retryLimit){
 						console.log('retry...');
