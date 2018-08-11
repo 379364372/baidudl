@@ -59,16 +59,20 @@ function SharePage(url)
 		$.ajax({
 			url: self.url.href,
 			tryCount: 0,
-			retryLimit: 3,
+			retryLimit: 5,
 			success: function(html){
 				// handle cases where the share page is not available
-				var err = html.match(/<title>页面不存在<\/title>/);
-				if(err){
+				var err1 = html.match(/<title>页面不存在<\/title>/);
+				var err2 = html.match(/<title>百度网盘-链接不存在<\/title>/);
+				if(err1 || err2){
 					this.tryCount += 1;
 					if(this.tryCount <= this.retryLimit){
 						console.log('retry...');
 						console.log('try count is: ' + this.tryCount);
-						$.ajax(this);
+						var tmp = this;
+						setTimeout(function(){
+							$.ajax(tmp);
+						}, 1000);
 						return;
 					}
 					console.log('Fail to get yunData in share page');
