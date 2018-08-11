@@ -58,7 +58,22 @@ function SharePage(url)
 		console.log('getting yunData in share page...');
 		$.ajax({
 			url: self.url.href,
+			tryCount: 0,
+			retryLimit: 3,
 			success: function(html){
+				// handle cases where the share page is not available
+				var err = html.match(/<title>页面不存在<\/title>/);
+				if(err){
+					this.tryCount += 1;
+					if(this.tryCount <= this.retryLimit){
+						console.log('retry...');
+						console.log('try count is: ' + this.tryCount);
+						$.ajax(this);
+						return;
+					}
+					console.log('Fail to get yunData in share page');
+					return;
+				}
 				var code = html.match(/yunData\.setData\(.*\)/);
 				var data = code[0].substring(16, code[0].length-1);
 				var yunData = JSON.parse(data);
