@@ -52,6 +52,7 @@ function resetConfig(){
 	config.rpcIdx = 0;
 	config.mode = 'rpc';
 	config.servers = [
+		'qdall01.baidupcs.com',
 		'd11.baidupcs.com',
 
 		'd1.baidupcs.com',

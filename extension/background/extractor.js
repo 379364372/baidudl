@@ -26,17 +26,17 @@ function Extractor(file)
 	self.__getHLinks__ = function(cb){
 
 		console.log('Try to fetch hlinks');
-		// exploit a race condition bug to get unlimited speed
-		var parsed_glink = self.parsed_glink;
-		var hlinks = config.servers.map(function(e){
-			parsed_glink.host = e;
-			parsed_glink.protocol = 'http';
-			return parsed_glink.href;
-		});
-		self.hlinks = hlinks;
+		self.hlinks = [];
 
-		// only anonymously get hlinks
-		self.__anonymous_getHLinks__(cb);
+		// get hlinks according to account status
+		if(!page.bduss){
+			self.__anonymous_getHLinks__(cb);
+			return;
+		}
+		else{
+			self.__login_getHLinks__(cb);
+			return;
+		}
 	};
 	self.__login_getHLinks__ = function(cb){
 		console.log('Try to get hlinks when logged in');
